@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.e.caseservice.dao.AutoParseCaseDao">
+
+    <select id="getAllStatus" resultType="com.e.caseservice.dto.StatusDto">
+        SELECT * FROM common_status
+    </select>
+
+    <select id="getAllModuleId" resultType="java.lang.String">
+        SELECT id FROM auto_moduleinfo where testSuiteId=#{testSuiteId}
+    </select>
+
+    <select id="getTestSuit" resultType="com.e.caseservice.dto.TestSuitDto">
+        SELECT auto_testsuitelist.id,auto_testsuitelist.version,common_status.name as status
+        FROM auto_testsuitelist
+        LEFT OUTER JOIN common_status
+        on common_status.id =auto_testsuitelist.status
+        WHERE auto_testsuitelist.id=#{testSuiteId}
+    </select>
+
+    <update id="updateTestSuite" parameterType="map">
+        update auto_testsuitelist
+        set config = #{config},info=#{info},status=(select id from common_status where name = #{status}),version=#{testSuiteVersion}
+        where id = #{testSuiteId};
+    </update>
+
+    <delete id="deleteAllCases" parameterType="java.util.List">
+        DELETE FROM auto_caseinfo WHERE moduleId in
+        <foreach collection="moduleList" item="item" index="index" open=" (" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAllModules" parameterType="java.lang.Integer">
+        DELETE FROM auto_moduleinfo WHERE testSuiteId = #{testSuiteId}
+    </delete>
+
+    <select id="getExistModules" resultType="com.e.caseservice.dto.AutoModuleInfoDto">
+        SELECT * FROM auto_moduleinfo where testSuiteId=#{testSuiteId}
+    </select>
+
+    <select id="getExistCases" resultType="com.e.caseservice.dto.AutoCaseInfoDto">
+        SELECT auto_caseinfo.* FROM `auto_caseinfo`
+        LEFT OUTER JOIN auto_moduleinfo
+        on auto_caseinfo.moduleId=auto_moduleinfo.id
+        WHERE auto_moduleinfo.testSuiteId=#{testSuiteId}
+    </select>
+
+    <insert id="insertAutoModules" parameterType="java.util.Set">
+        insert into
+        auto_moduleinfo(id,parentId,testSuiteId,name,type,status)
+        values
+        <foreach collection="autoModulesList" item="item" index="index" separator=",">
+            (#{item.id},#{item.parentId},#{item.testSuiteId},
+            #{item.name}, #{item.type}, (select id from common_status where name = 'normal'))
+        </foreach>
+    </insert>
+
+    <insert id="insertAutoCases" parameterType="java.util.Set">
+        insert into
+        auto_caseinfo(id,moduleId,name,description,priority,data,dataNum,groups,status,className,packageName,simpleClassName,gitUrl)
+        values
+        <foreach collection="autoCasesList" item="item" index="index" separator=",">
+            (#{item.id},#{item.moduleId}, #{item.name},#{item.description},
+            #{item.priority},#{item.data},#{item.dataNum},#{item.groups},
+            (select id from common_status where name = 'normal'),#{item.className},
+            #{item.packageName},#{item.simpleClassName},#{item.gitUrl})
+        </foreach>
+    </insert>
+
+    <delete id="deleteExistCases" parameterType="java.util.List">
+        DELETE FROM auto_caseinfo WHERE id in
+        <foreach collection="updateCaseIds" item="item" index="index" open=" (" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+</mapper>
