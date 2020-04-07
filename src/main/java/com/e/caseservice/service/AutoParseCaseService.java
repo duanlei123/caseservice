@@ -38,36 +38,43 @@ public class AutoParseCaseService {
      * 同步测试套
      * @param savePath  下载工程代码存储路径 (当前项目路径 + 线程名)
      */
-    public Result parseRepoCase(String gitUrl, String branchName, String confFileName,
-                                             int testSuiteId, String savePath, String gitToken,
-                                             String caseRootPackage) {
+    public Result parseRepoCase(String gitHttpUrl, String branchName, String confFileName,int testSuiteId,
+                                String savePath, String username, String password, String caseRootPackage) {
         try {
-
-            URL gitOriUrl = new URL(gitUrl);
+            // 校验 gitHttUrl
+            URL httpUrl = new URL(gitHttpUrl);
             //根据testSuiteId 查询测试套
             TestSuitDto testSuitDto = autoParseCaseDao.getTestSuit(testSuiteId);
+
+            // 测试套不存在
             if (testSuitDto == null) {
                 LOGGER.error("测试套不存在请先创建！");
                 return new Result(false, StatusCode.ERROR, "测试套不存在请先创建！");
-                // 如果测试套为运行中状态
-            } else if (Constants.TEST_SUITE_RUNNING_STATE.equalsIgnoreCase(testSuitDto.getStatus())) {
+
+            }
+            // 测试套为运行中状态
+            if (Constants.TEST_SUITE_RUNNING_STATE.equalsIgnoreCase(testSuitDto.getStatus())) {
                 LOGGER.error("测试套正在同步中, 如有问题请联系管理员 {}", testSuiteId);
                 return new Result(false, StatusCode.ERROR, "测试套正在同步中！");
-            } else {
-                // 修改测试套状态为 运行中
-                autoParseCaseDao.updateTestSuite(testSuiteId, "", "", Constants.TEST_SUITE_RUNNING_STATE, "");
-                // 启动同步线程 开始分析用例
-                ParseCaseThread parseCaseThread = new ParseCaseThread(gitOriUrl, branchName, confFileName, testSuiteId, savePath, gitToken, caseRootPackage, testSuitDto.getVersion());
-                new Thread(parseCaseThread).start();
             }
+
+            // 修改测试套状态为 运行中
+            autoParseCaseDao.updateTestSuite(testSuiteId, "", "", Constants.TEST_SUITE_RUNNING_STATE, "");
+            // 启动同步线程 开始分析用例
+            ParseCaseThread parseCaseThread = new ParseCaseThread(httpUrl, branchName, confFileName,
+                    testSuiteId, savePath, username, password, caseRootPackage, testSuitDto.getVersion());
+            new Thread(parseCaseThread).start();
+
         } catch (MalformedURLException e) {
-            LOGGER.error("请检查GitUrl {}, 传入正确的UrL,{}" , gitUrl, e.getMessage());
+            LOGGER.error("请检查GitUrl {}, 传入正确的UrL,{}" , gitHttpUrl, e.getMessage());
             //产生异常更新测试套表
             autoParseCaseDao.updateTestSuite(testSuiteId, "", "解析测试套异常,非法url", Constants.TEST_SUITE_ABNORMAL_STATE, "");
             return new Result(false, StatusCode.ERROR, "测试套同步失败,RUL异常！");
         }
         return new Result(true, StatusCode.OK, "请内心等待,测试套正在同步中");
     }
+
+
 
     /**
      * 分析用例失败时清除数据库中数据，成功时将结果写入数据库
@@ -124,9 +131,8 @@ public class AutoParseCaseService {
     /**
      * 开始分析测试套
      */
-    private void startParse(URL gitOriUrl, String branchName, String confFileName, int testSuiteId, String savePath, String gitToken,
-                            String caseRootPackage, String testSuiteVersion) {
-        LOGGER.info("开始分析测试套{},工程{}, 分支{}.",testSuiteId,gitOriUrl.toString(), branchName);
+    private void startParse(URL httpUrl, String branchName, String confFileName, int testSuiteId, String savePath, String username,
+                            String password, String caseRootPackage, String testSuiteVersion) {
         Date startTime = new Date();
         //查询数据库内已经存在的模块
         List<AutoModuleInfoDto> existModules = autoParseCaseDao.getExistModules(testSuiteId);
@@ -150,10 +156,13 @@ public class AutoParseCaseService {
             processResult(false, "初始化代码存储路径失败", testSuiteId, "", testSuiteVersion, savePathFile);
             return;
         }
+
+        LOGGER.info("开始分析测试套{},工程{}, 分支{}:",testSuiteId,httpUrl.toString(), branchName);
+
         // 从git下载测试套工程
         CaseGitRepoService caseGitRepoService = new CaseGitRepoService();
         //开始下载并分析用例代码文件，分析完毕后将其转为对应的数据结构存储
-        if (!caseGitRepoService.init(gitOriUrl, branchName, savePath, confFileName, gitToken, existModulesInfoMap, existCasesInfoMap, testSuiteId, caseRootPackage)) {
+        if (!caseGitRepoService.init(httpUrl, branchName, savePath, confFileName, username, password, existModulesInfoMap, existCasesInfoMap, testSuiteId, caseRootPackage)) {
             processResult(false, "下载代码失败", testSuiteId, "", testSuiteVersion, savePathFile);
             return;
         }
@@ -194,7 +203,7 @@ public class AutoParseCaseService {
             version = testSuiteVersion;
         }
         if (testSuiteVersion.isEmpty()) {
-            LOGGER.error("未找到测试套" + gitOriUrl.toString() + "版本信息");
+            LOGGER.error("未找到测试套" + httpUrl.toString() + "版本信息");
         }
         LOGGER.info("新增模块个数:" + caseGitRepoService.getInsertModuleNum());
         LOGGER.info("新增用例个数:" + caseGitRepoService.getInsertCasesNum());
@@ -202,7 +211,7 @@ public class AutoParseCaseService {
         LOGGER.info("处理@Test文件:" + caseGitRepoService.getTotalCaseFileNum());
         LOGGER.info("处理@dataProvider文件:" + caseGitRepoService.getTotalDataProviderFileNum());
         String expendTimeInfo = Tools.getDistanceTime(new Date().getTime() - startTime.getTime());
-        LOGGER.info("分析Git项目:" + gitOriUrl.toString() + "    " + branchName + "分支用例共耗时" + expendTimeInfo);
+        LOGGER.info("分析Git项目:" + httpUrl.toString() + "    " + branchName + "分支用例共耗时" + expendTimeInfo);
         processResult(true, "新增模块个数:" + caseGitRepoService.getInsertModuleNum() +
                 "新增用例个数:" + caseGitRepoService.getInsertCasesNum() +
                 ";更新用例个数:" + caseGitRepoService.getUpdateCasesNum() + " 耗时:" + expendTimeInfo, testSuiteId, config, version, savePathFile);
@@ -212,22 +221,24 @@ public class AutoParseCaseService {
      * 起新线程处理分析用例
      */
     class ParseCaseThread implements Runnable {
-        private final URL gitOriUrl;
+        private final URL httpUrl;
         private final String branchName;
         private final String confFileName;
         private final int testSuiteId;
         private final String savePath;
-        private final String gitToken;
+        private final String username;
+        private final String password;
         private final String caseRootPackage;
         private final String testSuiteVersion;
 
-        public ParseCaseThread(URL gitOriUrl, String branchName, String confFileName, int testSuiteId, String savePath, String gitToken, String caseRootPackage, String testSuiteVersion) {
-            this.gitOriUrl = gitOriUrl;
+        public ParseCaseThread(URL httpUrl, String branchName, String confFileName, int testSuiteId, String savePath, String username,String password, String caseRootPackage, String testSuiteVersion) {
+            this.httpUrl = httpUrl;
             this.branchName = branchName;
             this.confFileName = confFileName;
             this.testSuiteId = testSuiteId;
             this.savePath = savePath;
-            this.gitToken = gitToken;
+            this.username = username;
+            this.password = password;
             this.caseRootPackage = caseRootPackage;
             if (testSuiteVersion == null || testSuiteVersion.isEmpty()) {
                 this.testSuiteVersion = Constants.TEST_SUITE_DEFAULT_VERSION;
@@ -239,7 +250,7 @@ public class AutoParseCaseService {
         public void run() {
             Thread.currentThread().setName("testSuiteId:" + this.testSuiteId);
             // 开始分析
-            startParse(gitOriUrl, branchName, confFileName, testSuiteId, savePath, gitToken, caseRootPackage, testSuiteVersion);
+            startParse(httpUrl, branchName, confFileName, testSuiteId, savePath, username, password, caseRootPackage, testSuiteVersion);
         }
     }
 

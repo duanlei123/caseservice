@@ -77,7 +77,7 @@ public class CaseGitRepoService {
     /**
      * 访问git 测试套工程
      */
-    boolean init(URL gitOriUrl, String branchName, String savePath, String confFileName, String gitToken,
+    boolean init(URL httpUrl, String branchName, String savePath, String confFileName, String username, String password,
                  Map<String, String> existModulesInfoMap, Map<String, String> existCasesInfoMap, int testSuiteId, String caseRootPackage) {
         this.confFileName = confFileName;
         this.caseRootPackage = caseRootPackage;
@@ -85,7 +85,7 @@ public class CaseGitRepoService {
 
         //下载指定repo代码
         GitService gitService = new GitService();
-        if (!gitService.init(gitOriUrl, branchName, savePath, gitToken)) {
+        if (!gitService.init(httpUrl, branchName, savePath, username, password)) {
             LOGGER.error("GIT代码初始化失败!");
             return false;
         }

@@ -3,3 +3,4 @@
 2020-04-07 15:50:23.411 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=47s284ms286µs489ns).
 2020-04-07 15:56:00.482 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=56s575ms825µs625ns).
 2020-04-07 15:57:13.966 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m13s484ms683µs869ns).
+2020-04-07 19:07:42.974 [http-nio-9091-exec-1] WARN  o.s.w.s.m.support.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required String parameter 'gitHttpUrl' is not present]

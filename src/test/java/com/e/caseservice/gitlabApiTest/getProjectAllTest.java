@@ -5,7 +5,6 @@ import org.gitlab.api.models.GitlabProject;
 import org.gitlab.api.models.GitlabSession;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import javax.sound.midi.Soundbank;
 import java.io.IOException;
 import java.util.List;
 
