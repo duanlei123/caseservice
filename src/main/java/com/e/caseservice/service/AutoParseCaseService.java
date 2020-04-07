@@ -9,6 +9,7 @@ import com.e.caseservice.dto.AutoModuleInfoDto;
 import com.e.caseservice.dto.StatusDto;
 import com.e.caseservice.dto.TestSuitDto;
 import com.e.caseservice.utils.FileUtils;
+import com.e.caseservice.utils.ThreadHandle;
 import com.e.caseservice.utils.Tools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.*;
 
 @Service
 public class AutoParseCaseService {
@@ -60,11 +62,11 @@ public class AutoParseCaseService {
 
             // 修改测试套状态为 运行中
             autoParseCaseDao.updateTestSuite(testSuiteId, "", "", Constants.TEST_SUITE_RUNNING_STATE, "");
+
             // 启动同步线程 开始分析用例
             ParseCaseThread parseCaseThread = new ParseCaseThread(httpUrl, branchName, confFileName,
                     testSuiteId, savePath, username, password, caseRootPackage, testSuitDto.getVersion());
-            new Thread(parseCaseThread).start();
-
+            ThreadHandle.runThread(parseCaseThread);
         } catch (MalformedURLException e) {
             LOGGER.error("请检查GitUrl {}, 传入正确的UrL,{}" , gitHttpUrl, e.getMessage());
             //产生异常更新测试套表
@@ -253,6 +255,8 @@ public class AutoParseCaseService {
             startParse(httpUrl, branchName, confFileName, testSuiteId, savePath, username, password, caseRootPackage, testSuiteVersion);
         }
     }
+
+
 
 
 }

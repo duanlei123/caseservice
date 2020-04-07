@@ -784,3 +784,23 @@ com.mysql.cj.exceptions.InvalidConnectionAttributeException: The server time zon
 2020-04-07 19:15:35.498 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = ArrayIndexOutOfBoundsException.class
 2020-04-07 19:15:35.498 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = Exception.class
 2020-04-07 19:15:35.498 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptionsMessageRegExp = "^超出.*"
+2020-04-07 20:15:15.424 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = ArrayIndexOutOfBoundsException.class
+2020-04-07 20:15:15.424 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = Exception.class
+2020-04-07 20:15:15.424 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptionsMessageRegExp = "^超出.*"
+2020-04-07 20:16:13.177 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = ArrayIndexOutOfBoundsException.class
+2020-04-07 20:16:13.177 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = Exception.class
+2020-04-07 20:16:13.177 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptionsMessageRegExp = "^超出.*"
+2020-04-07 20:21:25.229 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = ArrayIndexOutOfBoundsException.class
+2020-04-07 20:21:25.230 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = Exception.class
+2020-04-07 20:21:25.230 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptionsMessageRegExp = "^超出.*"
+2020-04-07 20:46:03.820 [http-nio-9091-exec-1] ERROR com.e.caseservice.service.AutoParseCaseService - 解析超时,请联系管理员！
+2020-04-07 20:46:06.023 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = ArrayIndexOutOfBoundsException.class
+2020-04-07 20:46:06.023 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = Exception.class
+2020-04-07 20:46:06.023 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptionsMessageRegExp = "^超出.*"
+2020-04-07 20:49:10.179 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = ArrayIndexOutOfBoundsException.class
+2020-04-07 20:49:10.179 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = Exception.class
+2020-04-07 20:49:10.179 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptionsMessageRegExp = "^超出.*"
+2020-04-07 21:01:00.994 [http-nio-9091-exec-1] ERROR com.e.caseservice.service.AutoParseCaseService - 解析超时,请联系管理员！
+2020-04-07 21:01:01.987 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = ArrayIndexOutOfBoundsException.class
+2020-04-07 21:01:01.987 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptions = Exception.class
+2020-04-07 21:01:01.987 [testSuiteId:1] ERROR com.e.caseservice.dto.CaseClassDto - 不支持的@test注解expectedExceptionsMessageRegExp = "^超出.*"
