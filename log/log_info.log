@@ -36,3 +36,119 @@
 2020-04-05 23:22:11.330 [http-nio-9091-exec-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
 2020-04-05 23:22:11.400 [http-nio-9091-exec-1] INFO  com.e.caseservice.aspect.ControllerAspect - RESPONSE: com.e.caseservice.common.Result@481d2db3 
 2020-04-05 23:22:11.400 [http-nio-9091-exec-1] INFO  com.e.caseservice.aspect.ControllerAspect - SPEND TIME: 278 ms
+2020-04-07 15:33:24.714 [main] INFO  com.e.caseservice.CaseserviceApplication - Starting CaseserviceApplication on 4CV9042LN2 with PID 28132 (D:\java_code\caseservice\target\classes started by wb-dl321273 in D:\java_code\caseservice)
+2020-04-07 15:33:24.718 [main] INFO  com.e.caseservice.CaseserviceApplication - No active profile set, falling back to default profiles: default
+2020-04-07 15:33:25.711 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 9091 (http)
+2020-04-07 15:33:25.719 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9091"]
+2020-04-07 15:33:25.720 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2020-04-07 15:33:25.720 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.33]
+2020-04-07 15:33:25.871 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2020-04-07 15:33:25.871 [main] INFO  org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 1087 ms
+2020-04-07 15:33:26.343 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+2020-04-07 15:33:26.528 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9091"]
+2020-04-07 15:33:26.548 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 9091 (http) with context path ''
+2020-04-07 15:33:26.551 [main] INFO  com.e.caseservice.CaseserviceApplication - Started CaseserviceApplication in 2.327 seconds (JVM running for 3.417)
+2020-04-07 15:34:16.843 [http-nio-9091-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-04-07 15:34:16.844 [http-nio-9091-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2020-04-07 15:34:16.850 [http-nio-9091-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 6 ms
+2020-04-07 15:34:16.870 [http-nio-9091-exec-1] INFO  com.e.caseservice.aspect.ControllerAspect - URL: http://localhost:9091/getAllStatus, Method: GET, Params: [], IP: 192.168.18.1 
+2020-04-07 15:34:16.872 [http-nio-9091-exec-1] INFO  com.e.caseservice.aspect.ControllerAspect - Class Method: com.e.caseservice.controller.AutoParseCaseController.getAllStatus, Args: [] 
+2020-04-07 15:34:16.891 [http-nio-9091-exec-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2020-04-07 15:35:17.089 [SpringContextShutdownHook] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+2020-04-07 15:35:20.211 [main] INFO  com.e.caseservice.CaseserviceApplication - Starting CaseserviceApplication on 4CV9042LN2 with PID 28636 (D:\java_code\caseservice\target\classes started by wb-dl321273 in D:\java_code\caseservice)
+2020-04-07 15:35:20.215 [main] INFO  com.e.caseservice.CaseserviceApplication - No active profile set, falling back to default profiles: default
+2020-04-07 15:35:21.123 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 9091 (http)
+2020-04-07 15:35:21.129 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9091"]
+2020-04-07 15:35:21.130 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2020-04-07 15:35:21.130 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.33]
+2020-04-07 15:35:21.270 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2020-04-07 15:35:21.271 [main] INFO  org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 988 ms
+2020-04-07 15:35:21.692 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+2020-04-07 15:35:21.865 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9091"]
+2020-04-07 15:35:21.884 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 9091 (http) with context path ''
+2020-04-07 15:35:21.887 [main] INFO  com.e.caseservice.CaseserviceApplication - Started CaseserviceApplication in 2.087 seconds (JVM running for 3.057)
+2020-04-07 15:35:28.217 [http-nio-9091-exec-2] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-04-07 15:35:28.217 [http-nio-9091-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2020-04-07 15:35:28.223 [http-nio-9091-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 6 ms
+2020-04-07 15:35:28.241 [http-nio-9091-exec-2] INFO  com.e.caseservice.aspect.ControllerAspect - URL: http://localhost:9091/getAllStatus, Method: GET, Params: [], IP: 192.168.18.1 
+2020-04-07 15:35:28.243 [http-nio-9091-exec-2] INFO  com.e.caseservice.aspect.ControllerAspect - Class Method: com.e.caseservice.controller.AutoParseCaseController.getAllStatus, Args: [] 
+2020-04-07 15:35:28.260 [http-nio-9091-exec-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2020-04-07 15:36:16.128 [SpringContextShutdownHook] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+2020-04-07 15:36:19.237 [main] INFO  com.e.caseservice.CaseserviceApplication - Starting CaseserviceApplication on 4CV9042LN2 with PID 17604 (D:\java_code\caseservice\target\classes started by wb-dl321273 in D:\java_code\caseservice)
+2020-04-07 15:36:19.240 [main] INFO  com.e.caseservice.CaseserviceApplication - No active profile set, falling back to default profiles: default
+2020-04-07 15:36:20.165 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 9091 (http)
+2020-04-07 15:36:20.172 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9091"]
+2020-04-07 15:36:20.173 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2020-04-07 15:36:20.173 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.33]
+2020-04-07 15:36:20.310 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2020-04-07 15:36:20.310 [main] INFO  org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 1004 ms
+2020-04-07 15:36:20.728 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+2020-04-07 15:36:20.900 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9091"]
+2020-04-07 15:36:20.919 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 9091 (http) with context path ''
+2020-04-07 15:36:20.921 [main] INFO  com.e.caseservice.CaseserviceApplication - Started CaseserviceApplication in 2.116 seconds (JVM running for 3.089)
+2020-04-07 15:36:30.496 [http-nio-9091-exec-2] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-04-07 15:36:30.497 [http-nio-9091-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2020-04-07 15:36:30.502 [http-nio-9091-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 5 ms
+2020-04-07 15:36:30.521 [http-nio-9091-exec-2] INFO  com.e.caseservice.aspect.ControllerAspect - URL: http://localhost:9091/getAllStatus, Method: GET, Params: [], IP: 192.168.18.1 
+2020-04-07 15:36:30.523 [http-nio-9091-exec-2] INFO  com.e.caseservice.aspect.ControllerAspect - Class Method: com.e.caseservice.controller.AutoParseCaseController.getAllStatus, Args: [] 
+2020-04-07 15:36:30.540 [http-nio-9091-exec-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2020-04-07 15:36:54.155 [SpringContextShutdownHook] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+2020-04-07 15:36:57.250 [main] INFO  com.e.caseservice.CaseserviceApplication - Starting CaseserviceApplication on 4CV9042LN2 with PID 6836 (D:\java_code\caseservice\target\classes started by wb-dl321273 in D:\java_code\caseservice)
+2020-04-07 15:36:57.253 [main] INFO  com.e.caseservice.CaseserviceApplication - No active profile set, falling back to default profiles: default
+2020-04-07 15:36:58.176 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 9091 (http)
+2020-04-07 15:36:58.184 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9091"]
+2020-04-07 15:36:58.184 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2020-04-07 15:36:58.185 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.33]
+2020-04-07 15:36:58.324 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2020-04-07 15:36:58.324 [main] INFO  org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 996 ms
+2020-04-07 15:36:58.733 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+2020-04-07 15:36:58.910 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9091"]
+2020-04-07 15:36:58.929 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 9091 (http) with context path ''
+2020-04-07 15:36:58.932 [main] INFO  com.e.caseservice.CaseserviceApplication - Started CaseserviceApplication in 2.108 seconds (JVM running for 3.09)
+2020-04-07 15:37:20.212 [http-nio-9091-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-04-07 15:37:20.212 [http-nio-9091-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2020-04-07 15:37:20.218 [http-nio-9091-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 5 ms
+2020-04-07 15:37:20.237 [http-nio-9091-exec-1] INFO  com.e.caseservice.aspect.ControllerAspect - URL: http://localhost:9091/getAllStatus, Method: GET, Params: [], IP: 192.168.18.1 
+2020-04-07 15:37:20.239 [http-nio-9091-exec-1] INFO  com.e.caseservice.aspect.ControllerAspect - Class Method: com.e.caseservice.controller.AutoParseCaseController.getAllStatus, Args: [] 
+2020-04-07 15:37:20.256 [http-nio-9091-exec-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2020-04-07 15:37:20.356 [http-nio-9091-exec-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2020-04-07 15:37:20.395 [http-nio-9091-exec-1] INFO  com.e.caseservice.aspect.ControllerAspect - RESPONSE: com.e.caseservice.common.Result@26330a89 
+2020-04-07 15:37:20.396 [http-nio-9091-exec-1] INFO  com.e.caseservice.aspect.ControllerAspect - SPEND TIME: 162 ms
+2020-04-07 15:40:51.881 [http-nio-9091-exec-6] INFO  com.e.caseservice.aspect.ControllerAspect - URL: http://localhost:9091/parseRepoCase, Method: POST, Params: [gitUrl:git@192.168.18.132:wb-dl321273/CaseDemo.git, branchName:master, confFileName:conf.properties, gitToken:yrwSQx-4fSF9Up94jkB_, testSuiteId:1, caseRootPackage:testcase], IP: 192.168.18.1 
+2020-04-07 15:40:51.882 [http-nio-9091-exec-6] INFO  com.e.caseservice.aspect.ControllerAspect - Class Method: com.e.caseservice.controller.AutoParseCaseController.parseRepoCase, Args: [git@192.168.18.132:wb-dl321273/CaseDemo.git, master, conf.properties, yrwSQx-4fSF9Up94jkB_, 1, testcase] 
+2020-04-07 15:41:30.862 [http-nio-9091-exec-6] INFO  com.e.caseservice.aspect.ControllerAspect - RESPONSE: com.e.caseservice.common.Result@46319a0e 
+2020-04-07 15:41:30.862 [http-nio-9091-exec-6] INFO  com.e.caseservice.aspect.ControllerAspect - SPEND TIME: 38981 ms
+2020-04-07 15:42:00.671 [http-nio-9091-exec-7] INFO  com.e.caseservice.aspect.ControllerAspect - URL: http://localhost:9091/parseRepoCase, Method: POST, Params: [gitUrl:http://192.168.18.132/wb-dl321273/CaseDemo.git, branchName:master, confFileName:conf.properties, gitToken:yrwSQx-4fSF9Up94jkB_, testSuiteId:1, caseRootPackage:testcase], IP: 192.168.18.1 
+2020-04-07 15:42:00.672 [http-nio-9091-exec-7] INFO  com.e.caseservice.aspect.ControllerAspect - Class Method: com.e.caseservice.controller.AutoParseCaseController.parseRepoCase, Args: [http://192.168.18.132/wb-dl321273/CaseDemo.git, master, conf.properties, yrwSQx-4fSF9Up94jkB_, 1, testcase] 
+2020-04-07 15:42:14.083 [http-nio-9091-exec-7] INFO  com.e.caseservice.aspect.ControllerAspect - RESPONSE: com.e.caseservice.common.Result@3de22d40 
+2020-04-07 15:42:14.083 [http-nio-9091-exec-7] INFO  com.e.caseservice.aspect.ControllerAspect - SPEND TIME: 13412 ms
+2020-04-07 15:46:40.150 [http-nio-9091-exec-10] INFO  com.e.caseservice.aspect.ControllerAspect - URL: http://localhost:9091/parseRepoCase, Method: POST, Params: [gitUrl:http://192.168.18.132/wb-dl321273/CaseDemo.git, branchName:master, confFileName:conf.properties, gitToken:yrwSQx-4fSF9Up94jkB_, testSuiteId:1, caseRootPackage:testcase], IP: 192.168.18.1 
+2020-04-07 15:46:40.150 [http-nio-9091-exec-10] INFO  com.e.caseservice.aspect.ControllerAspect - Class Method: com.e.caseservice.controller.AutoParseCaseController.parseRepoCase, Args: [http://192.168.18.132/wb-dl321273/CaseDemo.git, master, conf.properties, yrwSQx-4fSF9Up94jkB_, 1, testcase] 
+2020-04-07 15:48:04.593 [http-nio-9091-exec-10] INFO  com.e.caseservice.aspect.ControllerAspect - RESPONSE: com.e.caseservice.common.Result@4e069c40 
+2020-04-07 15:48:04.593 [http-nio-9091-exec-10] INFO  com.e.caseservice.aspect.ControllerAspect - SPEND TIME: 84444 ms
+2020-04-07 15:48:04.594 [testSuiteId:1] INFO  com.e.caseservice.service.AutoParseCaseService - 开始分析测试套1,工程http://192.168.18.132/wb-dl321273/CaseDemo.git, 分支master.
+2020-04-07 15:50:26.083 [testSuiteId:1] INFO  com.e.caseservice.service.GitService - urlStr http://192.168.18.132//api/v3/projects/allyrwSQx-4fSF9Up94jkB_
+2020-04-07 15:53:03.720 [http-nio-9091-exec-3] INFO  com.e.caseservice.aspect.ControllerAspect - URL: http://localhost:9091/parseRepoCase, Method: POST, Params: [gitUrl:http://192.168.18.132/wb-dl321273/CaseDemo.git, branchName:master, confFileName:conf.properties, gitToken:xZgQ9ExeTsDqzzzt6Dax, testSuiteId:1, caseRootPackage:testcase], IP: 192.168.18.1 
+2020-04-07 15:53:03.720 [http-nio-9091-exec-3] INFO  com.e.caseservice.aspect.ControllerAspect - Class Method: com.e.caseservice.controller.AutoParseCaseController.parseRepoCase, Args: [http://192.168.18.132/wb-dl321273/CaseDemo.git, master, conf.properties, xZgQ9ExeTsDqzzzt6Dax, 1, testcase] 
+2020-04-07 15:53:12.953 [testSuiteId:1] INFO  com.e.caseservice.service.AutoParseCaseService - 开始分析测试套1,工程http://192.168.18.132/wb-dl321273/CaseDemo.git, 分支master.
+2020-04-07 15:53:20.299 [http-nio-9091-exec-3] INFO  com.e.caseservice.aspect.ControllerAspect - RESPONSE: com.e.caseservice.common.Result@2a5c68b9 
+2020-04-07 15:53:25.780 [http-nio-9091-exec-3] INFO  com.e.caseservice.aspect.ControllerAspect - SPEND TIME: 22061 ms
+2020-04-07 15:53:49.962 [testSuiteId:1] INFO  com.e.caseservice.service.GitService - urlStr http://192.168.18.132//api/v3/projects/allxZgQ9ExeTsDqzzzt6Dax
+2020-04-07 15:54:04.242 [testSuiteId:1] INFO  com.e.caseservice.service.GitService - Git http repo:http://192.168.18.132/wb-dl321273/CaseDemo.git
+2020-04-07 15:54:51.336 [testSuiteId:1] INFO  com.e.caseservice.service.GitService - wb-dl321273/CaseDemo
+2020-04-07 15:55:18.143 [testSuiteId:1] INFO  com.e.caseservice.service.GitService - 开始下载并解压tar包
+2020-04-07 15:55:25.154 [testSuiteId:1] INFO  com.e.caseservice.service.GitService - 下载项目大小:26.949219 KB
+2020-04-07 15:55:26.079 [testSuiteId:1] INFO  com.e.caseservice.service.GitService - 耗时       :16.16 秒
+2020-04-07 15:55:26.752 [testSuiteId:1] INFO  com.e.caseservice.service.GitService - 下载速率大小:1.6676497 KBps
+2020-04-07 15:56:01.881 [testSuiteId:1] INFO  com.e.caseservice.service.CaseGitRepoService - 获取项目文件夹名称D:\java_code\caseservice\http-nio-9091-exec-3\CaseDemo-master-fda187a1ebe2a54915404829b3af54b1478182ab
+2020-04-07 15:56:23.130 [testSuiteId:1] INFO  com.e.caseservice.service.CaseGitRepoService - 处理配置文件:D:\java_code\caseservice\http-nio-9091-exec-3\CaseDemo-master-fda187a1ebe2a54915404829b3af54b1478182ab\conf\conf.properties
+2020-04-07 15:57:41.985 [testSuiteId:1] INFO  com.e.caseservice.service.AutoParseCaseService - 分析用例完毕，将结果写入数据库
+2020-04-07 15:58:02.298 [testSuiteId:1] INFO  com.e.caseservice.service.AutoParseCaseService - 新增模块个数:4
+2020-04-07 15:58:03.401 [testSuiteId:1] INFO  com.e.caseservice.service.AutoParseCaseService - 新增用例个数:16
+2020-04-07 15:58:08.802 [testSuiteId:1] INFO  com.e.caseservice.service.AutoParseCaseService - 更新用例个数:0
+2020-04-07 15:58:09.802 [testSuiteId:1] INFO  com.e.caseservice.service.AutoParseCaseService - 处理@Test文件:3
+2020-04-07 15:58:12.034 [testSuiteId:1] INFO  com.e.caseservice.service.AutoParseCaseService - 处理@dataProvider文件:1
+2020-04-07 15:58:15.158 [testSuiteId:1] INFO  com.e.caseservice.service.AutoParseCaseService - 分析Git项目:http://192.168.18.132/wb-dl321273/CaseDemo.git    master分支用例共耗时4 minutes 49 seconds 307 milliSeconds
+2020-04-07 16:09:53.343 [SpringContextShutdownHook] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+2020-04-07 16:09:53.344 [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2020-04-07 16:09:53.350 [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

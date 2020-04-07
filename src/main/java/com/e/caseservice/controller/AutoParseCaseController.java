@@ -29,11 +29,11 @@ public class AutoParseCaseController {
 
     /**
      * 解析自动化case
-     * @param gitUrl giturl
+     * @param gitUrl giturl , githttpurl
      * @param branchName 分支名称
      * @param confFileName case工程配置文件
      * @param gitToken git Token 这里需要管理员的Token 必须有权限的token
-     * @param testSuiteId  测试套id
+     * @param testSuiteId  测试套id （测试套创建从用户页面创建, 未开发）
      * @param caseRootPackage case是所在报路径
      */
     @RequestMapping(value = "/parseRepoCase", method = RequestMethod.POST)
