@@ -3,19 +3,20 @@ package com.e.caseservice.controller;
 import com.e.caseservice.common.Constants;
 import com.e.caseservice.common.Result;
 import com.e.caseservice.common.StatusCode;
-import com.e.caseservice.dto.StatusDto;
+import com.e.caseservice.dto.autocase.StatusDto;
+import com.e.caseservice.dto.autotest.AutoTestSuiteDto;
 import com.e.caseservice.service.AutoParseCaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 解析自动化case 工程 入库
  */
 @RestController
+@RequestMapping("/autotestsuit")
 public class AutoParseCaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AutoParseCaseController.class);
@@ -28,24 +29,12 @@ public class AutoParseCaseController {
 
     /**
      * 解析自动化case
-     * @param gitHttpUrl giturl , githttpurl
-     * @param branchName 分支名称
-     * @param confFileName case工程配置文件
-     * @param testSuiteId  测试套id （测试套创建从用户页面创建, 未开发）
-     * @param caseRootPackage case是所在根路径
-     *
      */
-    @RequestMapping(value = "/parseRepoCase", method = RequestMethod.POST)
+    @RequestMapping(value = "/parseRepoCase", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public Result parseRepoCase(@RequestParam(value = "gitHttpUrl") String gitHttpUrl,
-                                @RequestParam(value = "branchName") String branchName,
-                                @RequestParam(value = "confFileName") String confFileName,
-                                @RequestParam(value = "username") String username,
-                                @RequestParam(value = "password") String password,
-                                @RequestParam(value = "testSuiteId") int testSuiteId,
-                                @RequestParam(value = "caseRootPackage") String caseRootPackage) {
+    public Result parseRepoCase(@RequestBody AutoTestSuiteDto testsuite) {
         String savePath = Constants.REPO_DOWNLOAD_FOLDER + "/" + Thread.currentThread().getName();
-        return autoParseCaseService.parseRepoCase(gitHttpUrl, branchName, confFileName, testSuiteId,savePath,username,password,caseRootPackage);
+        return autoParseCaseService.parseRepoCase(testsuite.getGitUrl(), testsuite.getBranch(), testsuite.getConfFileName(), testsuite.getId(),savePath,testsuite.getGitusername(),testsuite.getGitpassword(),testsuite.getCaseRootPackage());
 
     }
 

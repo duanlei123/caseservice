@@ -1,0 +1,78 @@
+h3(ng-controller="AutoTaskReportControllerDtpBack") 测试报告
+    a
+        button.btn.btn-pill-left.btn-default(type='button', ui-sref="auto.auto-task-exec({tid:task_id, eid: exec_id})", title="返回自动化测试执行列表")
+            em.fa.fa-mail-reply  返回
+
+.container-fluid(ng-class="inBusy?'whirl traditional':''", ng-controller="AutoTaskReportControllerDtp")
+    style(type='text/css').
+        td pre {
+            border: 0;
+        }
+        .autoTitle {
+            display:none
+        }
+    .row.mb-lg.pb-lg
+        div
+            .pull-right.mr-xl.mt-sm
+                span(ng-if ="vm.sendResult ==SEND_STATE.SendFail ").text-danger 发送失败&nbsp;&nbsp;
+                span(ng-if ="vm.sendResult ==SEND_STATE.SendOk ").text-success 发送成功&nbsp;&nbsp;
+                span.btn-group(dropdown='dropdown')
+                    button.btn.btn-lg.button-create(ng-click="sendAutoTaskReport([])")
+                        span.icon.icon-envelope
+                        span 邮件发送
+                    button.btn.btn-lg.button-create.dropdown-toggle(dropdown-toggle='')
+                        span.caret
+                        span.sr-only primary
+                    ul.dropdown-menu.dropdown-hover-color.dt-arrow.text-center.animated.fadeIn(role='menu')
+                        li(ng-click="openConfirmSendReportModal()")
+                            a 发送到
+                span.btn-group(ng-if="isReportHtmlZipCreated")
+                    a(ng-href="../autotask/downloadReport/{{autoTaskExecId}}/zip/html")
+                        button.btn.btn-lg.btn-info 导出
+
+            h2.mb0.ml.pl
+                a(ui-sref="auto.auto-task-exec({tid: autoTaskInfo.id, eid: autoTaskExecId})").link-unstyled  {{autoTaskInfo.name}}
+                small.text-muted(title="执行时间") &nbsp;&nbsp;&nbsp;{{autoTaskExec.jobStartTime | date:'yyyy-MM-dd HH:mm ' }}
+        hr.mvm.h
+        .ml-lg.pl-lg
+            div(ui-scroll-viewport='', style='overflow-y: auto;margin-top:15px;line-height:normal')
+                //p(ng-bind-html='buildReportOrConsole',style="float: right")
+                p.h4(ng-bind-html="autoTaskReport")
+script(type="text/ng-template", id='/confirmSendReport.html')
+    form#receiverForm.form-validate.form-horizontal(name="ReceiverForm", novalidate="", display-type="dtpAuto")
+        .modal-header
+            button.close(type="button", data-dismiss="modal", aria-hidden="true", ng-click="cancel()") ×
+            h4.modal-title 任务报告收件人设置
+        .modal-body
+            .form-group
+                label.col-sm-2.control-label
+                    span 邮箱地址
+                .col-sm-8
+                    div.col-sm-12(ng-repeat="receiver in receiverList track by $index", style="margin-bottom: 8px")
+                        .col-sm-10
+                            input.form-control(spellcheck="false", required="", type="email", ng-model="receiver.mailAddress", placeholder="请输入收件人邮箱")
+                        .col-sm-1
+                            span.fa.fa-minus-square.btn.btn-link(ng-click="delEmailAddress($index)", ng-if="receiverList.length > 1") 删除
+                span.fa.fa-plus-square.btn.btn-link(ng-click="addEmailAddress()") 添加
+        .modal-footer
+            button.btn.btn-primary(type="button", ng-click="submitForm()", ng-disabled="!(ReceiverForm.$valid && receiverList.length > 0)") 确定
+            button.btn.btn-default(type="button", ng-click="cancel()") 取消
+    form.form-horizontal(display-type="dtpPro")
+        .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true', ng-click='cancel()') ×
+            h4.modal-title 邮件发送测试报告，选择收件人
+        .modal-body
+            .form-group
+                label.col-sm-2.control-label(style="width:16%;padding-left:0px;padding-top:14px") 收件人:
+                .col-sm-10
+                    p.input-group.form-control-static
+                        ui-select(required='', multiple='', ng-model='vm.receiveUsers', theme='bootstrap', ng-disabled='disabled', reset-search-input='true')
+                            ui-select-match(placeholder='支持工号和花名过滤（未选择按正式报告关注人发送）') {{$item.value}}
+                            ui-select-choices(repeat='user.id as user in users | propsFilter: {value: $select.search, data: $select.search}') {{user.value}} &lt;{{user.data}}&gt;
+                        span.input-group-btn
+                            button.btn.btn-default(type='button', ng-click="clearSelectedUsers()", title='清空')
+                                em.icon-close
+        .modal-footer
+            button.btn.btn-primary(type='button', ng-click='submitForm()') 发送报告邮件
+            button.btn.btn-default(type='button', ng-click='cancel()') 取消
+

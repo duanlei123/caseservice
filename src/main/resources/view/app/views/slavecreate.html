@@ -1,0 +1,153 @@
+<h3>执行机列表>{{slave_id ? "编辑执行机" : "新建执行机"}}
+   <a>
+      <button type="button" ui-sref="auto.slavelist" class="btn btn-pill-left btn-default">
+         <em class="fa fa-mail-reply">返回</em>
+      </button>
+   </a>
+</h3>
+<!--.pull-rightsmall(style="color:red;float:left;") *
+small(style="float:left;") 标记为必填项-->
+<div id="taskCreatePage" class="container-fluid">
+   <dl data-title="基本信息配置" data-disabled="false" class="bk-group">
+      <dt class="bk-group-title">基本信息配置</dt>
+      <dd class="bk-group-detail">
+         <div class="bk-group">
+            <form id="slaveInfoForm" name="slaveInfoForm" novalidate="" class="form-validate">
+               <div class="bk-form-row">
+                  <label class="bk-form-row-name">
+                     <span class="text-danger">*</span>执行机名称：</label>
+                  <div class="bk-form-row-cell">
+                     <div style="float:left" class="bk-form-row-li col-lg-12">
+                        <div class="row">
+                           <div style="min-width: 200px" class="col-lg-4">
+                              <input name="slaveName" type="text" required="" placeholder="仅能包含字母、数字，长度为3-35个字符" ng-model="slave.name" ng-disabled="!isEditSlaveName" ng-pattern="/^[0-9a-zA-Z]{3,35}$/" class="form-control" />
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="bk-form-row">
+                  <label class="bk-form-row-name">
+                     <span class="text-danger">*</span>并行数：</label>
+                  <div class="bk-form-row-cell">
+                     <div style="float:left" class="bk-form-row-li col-lg-12">
+                        <div class="row">
+                           <div style="min-width: 200px" class="col-lg-4">
+                              <input name="numExecutors" type="number" required="" min="1" ng-model="slave.numExecutors" class="form-control" />
+                           </div>
+                        </div>
+                     </div>
+                     <div class="bk-form-row-txt">
+                        <span>执行机任务并行数量，最小值为1</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="bk-form-row">
+                  <label class="bk-form-row-name">
+                     <span class="text-danger">*</span>工作目录：</label>
+                  <div class="bk-form-row-cell">
+                     <div style="float:left" class="bk-form-row-li col-lg-12">
+                        <div class="row">
+                           <div style="min-width: 200px" class="col-lg-4">
+                              <input name="workCatalog" type="text" required="" placeholder="请填写执行机工作目录" ng-model="slave.workCatalog" class="form-control" />
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="bk-form-row">
+                  <label class="bk-form-row-name">
+                     <span class="text-danger">*</span>主机地址：</label>
+                  <div class="bk-form-row-cell">
+                     <div style="float:left" class="bk-form-row-li col-lg-12">
+                        <div class="row">
+                           <div style="min-width: 200px" class="col-lg-4">
+                              <input name="host" type="text" required="" placeholder="主机地址格式如192.168.1.0，不可为空" ng-model="slave.host" ng-pattern="/^((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))))$/" class="form-control"
+                              />
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="bk-form-row">
+                  <label class="bk-form-row-name">
+                     <span class="text-danger">*</span>登录账号：</label>
+                  <div class="bk-form-row-cell">
+                     <div style="float:left" class="bk-form-row-li col-lg-12">
+                        <div class="row">
+                           <div style="min-width: 200px" class="col-lg-4">
+                              <div class="row">
+                                 <div class="col-lg-9">
+                                    <ui-select name="credentials" ng-if="true" required="" ng-model="slave.credential" theme="bootstrap" reset-search-input="true" class="text-left">
+                                       <ui-select-match placeholder="请选择登录账户">{{$select.selected.displayName}}</ui-select-match>
+                                       <ui-select-choices repeat="credential.id as credential in credentials | filter: $select.search">
+                                          <span ng-bind-html="credential.displayName | highlight: $select.search"></span>
+                                       </ui-select-choices>
+                                    </ui-select>
+                                 </div>
+                                 <div class="col-lg-3">
+                                    <button type="button" ng-click="addCredentials()" class="btn btn-dtgreen">增加</button>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="bk-form-row">
+                  <label class="bk-form-row-name">
+                     <span>标签：</span>
+                  </label>
+                  <div class="bk-form-row-cell">
+                     <div style="float:left" class="bk-form-row-li col-lg-12">
+                        <div class="row">
+                           <div style="min-width: 200px" class="col-lg-4">
+                              <input name="tag" type="text" ng-model="slave.tag" placeholder="多个标签使用空格作为分隔符" class="form-control" />
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="bk-form-row">
+                  <label class="bk-form-row-name">
+                     <span>执行机描述：</span>
+                  </label>
+                  <div class="bk-form-row-cell">
+                     <div style="float:left" class="bk-form-row-li col-lg-12">
+                        <div class="row">
+                           <div style="min-width: 200px" class="col-lg-4">
+                              <textarea maxlength="512" spellcheck="false" style="resize: none;" type="text" ng-model="slave.description" placeholder="请填写执行机描述，512个字符以内" class="form-control"></textarea>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="bk-form-row">
+                  <label class="bk-form-row-name">
+                     <span class="text-danger">*</span>注意事项：</label>
+                  <div class="bk-form-row-cell">
+                     <span>执行机需已安装Jdk，执行命令#/usr/bin/java -version可以返回Jdk版本</span>
+                  </div>
+                  <div style="margin-top:8px" class="bk-form-row-cell">
+                     <span>执行机需已安装Git，执行命令#/usr/bin/git --version可以返回Git版本</span>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </dd>
+   </dl>
+   <dl class="bk-group">
+      <dt class="bk-group-title ng-binding">提交</dt>
+      <dd class="bk-group-detail">
+         <div class="bk-form-row">
+            <div class="bk-form-row-cell">
+               <button type="submit" ng-click="createSlave()" ng-disabled="!slave.name || !slave.numExecutors || !slave.workCatalog || !slave.host || !slave.credential" class="btn btn-lg btn-dtblue">保存</button>
+               <button type="button" ng-click="cancelCreateSlave()" class="btn btn-lg btn-default">取消</button>
+            </div>
+         </div>
+      </dd>
+   </dl>
+</div>
+<script type="text/ng-template" id="/addCredentials.html">
+   <form id="addCredentialsForm" name="addCredentialsForm" novalidate="" class="form-validate form-horizontal"><div class="modal-header"><button type="button" data-dismiss="modal" aria-hidden="true" ng-click="cancel()" class="close">×</button><h4 class="modal-title">增加登录账号</h4></div><div class="modal-bodyd"><div class="form-group"><label class="col-md-2 control-label"><span>用户名</span><span style="color:#ff0000">*</span></label><div class="col-md-8"><input name="username" type="text" required="" ng-model="credentialsProvider.username" class="form-control"/><span ng-show="validateModelInput('username', 'required')" class="text-danger">用户名不能为空</span></div></div><div class="form-group"><label class="col-md-2 control-label"><span>密码</span><span style="color:#ff0000">*</span></label><div class="col-md-8"><input name="password" type="password" required="" ng-model="credentialsProvider.password" class="form-control"/><span ng-show="validateModelInput('password', 'required')" class="text-danger">密码不能为空</span></div></div><div class="form-group"><label class="col-md-2 control-label">描述</label><div class="col-md-8"><input type="text" name="credentialsProvider.description" ng-model="credentialsProvider.description" class="form-control"/></div></div></div><div class="modal-footer"><small style="color:red;float:left;">*</small><small style="float:left;">标记为必填项</small><button type="button" ng-click="editFormSubmit()" class="btn btn-primary">确定</button><button type="button" ng-click="cancel()" class="btn btn-default">取消</button></div></form>
+</script>

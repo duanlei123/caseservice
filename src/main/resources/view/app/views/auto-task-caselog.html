@@ -1,0 +1,256 @@
+<h3 ng-controller="AutoTaskCaseLogControllerDtpBack">测试用例详情
+   <a class="hide">
+      <button type="button" ui-sref="auto.auto-task-exec({tid:task_id, eid: exec_id})" title="返回自动化测试执行列表" class="btn btn-pill-left btn-default">
+         <em class="fa fa-mail-reply"> 返回</em>
+      </button>
+   </a>
+</h3>
+<div ng-class="inBusy?'whirl traditional':''" ng-controller="AutoTaskCaseLogControllerDtp" class="container-fluid">
+   <h3 title="用例名称" class="pb ml pl-sm"><a ng-href="{{autoTaskCaseResult.gitUrl}}" target="_blank">{{autoTaskCaseResult.caseName}}</a>
+      <small title="所属模块" class="text-muted">{{autoTaskCaseResult.className}}</small>
+      <span title="耗时" style="font-size: 80%" class="text-muted text-normal">({{autoTaskCaseResult.formatTotalDuration}})</span>
+   </h3>
+   <div class="row well m-lg pb-lg pt">
+      <div class="row ml0">
+         <div class="row">
+            <div class="col-md-1 text-center visible-md visible-lg ph0 pt mt-lg thumb48">
+               <em class="fa icon-cloud-upload fa-3x text-muted ml"></em>
+            </div>
+            <div class="col-md-2">
+               <h2 ng-style="{'color': showColor(autoTaskCaseResult.result)}" class="pl-sm pb-sm mb-sm">{{ autoTaskCaseResult.result==null ? 'Not Test' : autoTaskCaseResult.result}}</h2>
+            </div>
+         </div>
+         <div class="col-md-12">
+            <!--h2.pl-sm.pb-sm.mb-sm(ng-style="{'color': showColor(autoTaskCaseResult.result)}") {{ autoTaskCaseResult.result==null ? 'Not Test' : autoTaskCaseResult.result}}-->
+            <div style="font-size: 14px;" class="row">
+               <div class="col-lg-4">
+                  <div class="form-horizontal">
+                     <div class="form-group m0">
+                        <div class="col-md-4 text-bold ph0 control-label">启动时间 :</div>
+                        <div ng-if="autoTaskCaseResult.startMillis!=null" class="col-md-8 text-normal form-control-static">&nbsp;{{autoTaskCaseResult.startMillis | date:'yyyy-MM-dd HH:mm:ss.sss ' }}</div>
+                        <div ng-if="autoTaskCaseResult.startMillis==null" class="col-md-8 text-normal form-control-static">&nbsp;</div>
+                     </div>
+                     <div class="form-group m0">
+                        <div class="col-md-4 text-bold ph0 control-label">结束时间 :</div>
+                        <div ng-if="autoTaskCaseResult.endMillis!=null" class="col-md-8 text-normal form-control-static">&nbsp;{{autoTaskCaseResult.endMillis | date:'yyyy-MM-dd HH:mm:ss.sss ' }}</div>
+                        <div ng-if="autoTaskCaseResult.endMillis==null" class="col-md-8 text-normal form-control-static">&nbsp;</div>
+                     </div>
+                     <div class="form-group m0">
+                        <div class="col-md-4 text-bold ph0 control-label">执行时间 :</div>
+                        <div ng-if="autoTaskCaseResult.duration!=null" class="col-md-8 text-normall form-control-static">&nbsp;{{autoTaskCaseResult.formatDuration}}</div>
+                        <div ng-if="autoTaskCaseResult.duration==null" class="col-md-8 text-normall form-control-static">&nbsp;</div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4">
+                  <div class="form-horizontal">
+                     <div class="form-group m0">
+                        <div class="col-md-6 text-bold ph0 control-label">BeforeMethod :</div>
+                        <div ng-if="autoTaskCaseResult.beforeMethodDuration!=null" class="col-md-6 text-normall form-control-static">&nbsp;{{autoTaskCaseResult.formatBmDuration}}</div>
+                        <div ng-if="autoTaskCaseResult.beforeMethodDuration==null" class="col-md-6 text-normall form-control-static">&nbsp;</div>
+                     </div>
+                     <div class="form-group m0">
+                        <div class="col-md-6 text-bold ph0 control-label">AfterMethod :</div>
+                        <div ng-if="autoTaskCaseResult.afterMethodDuration!=null" class="col-md-6 text-normall form-control-static">&nbsp;{{autoTaskCaseResult.formatAmDuration}}</div>
+                        <div ng-if="autoTaskCaseResult.afterMethodDuration==null" class="col-md-6 text-normall form-control-static">&nbsp;</div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4">
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div class="form-horizontal">
+                           <div class="form-group m0">
+                              <div class="col-md-4 text-bold ph0 control-label">用例描述 :</div>
+                              <div class="col-md-8 text-normal form-control-static">{{autoTaskCaseResult.caseDesc}}</div>
+                           </div>
+                           <div class="form-group m0">
+                              <div class="col-md-4 text-bold ph0 control-label">用例数据 :</div>
+                              <div style="word-break: break-all;word-wrap: break-word;" class="col-md-8 text-normal form-control-static">{{autoTaskCaseResult.data}}</div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div ng-if="hasFailMessage" class="row mb-lg pb-lg">
+      <div ng-init="showErrorDetail = true" ng-click="showErrorDetail = !showErrorDetail">
+         <h4 class="inline mb0 ml pl">
+            <small>
+               <em ng-if="showErrorDetail" class="fa fa-caret-down"></em>
+               <em ng-if="!showErrorDetail" class="fa fa-caret-right"></em>
+            </small>
+            <span class="text-muted">&nbsp;失败信息</span>
+         </h4>
+         <span title="{{autoTaskCaseResult.failMessage}}" class="ml">{{autoTaskCaseResult.failMessage | characters:200 :true}}</span>
+      </div>
+      <hr class="mv mh" />
+      <div ng-show="showErrorDetail" class="ml-lg pl-lg">
+         <div class="table-responsive">
+            <table style="width:99%;max-width:99%" class="table">
+               <tbody>
+                  <tr ng-repeat="config in autoTaskCaseResult.beforeConfigs" ng-if="config.failFullMessage!=null &amp;&amp; config.failFullMessage.length&gt;0">
+                     <td style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{config.failIndex%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3;'}}">
+                        <div style="margin-left: 15px">
+                           <div class="row">
+                              <div class="text-muted">{{config.config}}</div><i tooltip="{{config.config}}{{config.caseName}}">{{config.caseName | characters:20 :true}}</i>
+                           </div>
+                        </div>
+                     </td>
+                     <td style="width:90%;{{config.failIndex==0? 'border-top: 0 solid #eeeeee;':''}}">
+                        <pre style="font: inherit;border: none;color: inherit; font-size:96%" ng-bind-html="config.failFullMessage"></pre>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{autoTaskCaseResult.failIndex%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3'}}" class="text-bold">
+                        <div style="margin-left: 15px">
+                           <div class="row">
+                              <div class="text-bold">用例执行</div><i tooltip="{{autoTaskCaseResult.caseName}}" class="text-normal">{{autoTaskCaseResult.caseName | characters:20 :true}}</i>
+                           </div>
+                        </div>
+                     </td>
+                     <td style="width:90%;{{autoTaskCaseResult.failIndex==0? 'border-top: 0 solid #eeeeee;':''}}">
+                        <pre style="font: inherit;border: none;color: inherit; font-size:96%" ng-bind-html="autoTaskCaseResult.failFullMessage"></pre>
+                     </td>
+                  </tr>
+                  <tr ng-repeat="config in autoTaskCaseResult.afterConfigs" ng-if="config.failFullMessage!=null &amp;&amp; config.failFullMessage.length&gt;0">
+                     <td style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{config.failIndex%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3;'}}">
+                        <div style="margin-left: 15px">
+                           <div class="row">
+                              <div class="text-muted">{{config.config}}</div><i tooltip="{{config.config}}{{config.caseName}}">{{config.caseName | characters:20 :true}}</i>
+                           </div>
+                        </div>
+                     </td>
+                     <td style="width:90%;">
+                        <pre style="font: inherit;border: none;color: inherit; font-size:96%" ng-bind-html="config.failFullMessage"></pre>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+   <div class="row mb-lg pb-lg">
+      <div ng-init="showLog = true" ng-click="showLog = !showLog">
+         <h4 class="inline mb0 ml pl">
+            <small>
+               <em ng-if="showLog" class="fa fa-caret-down"></em>
+               <em ng-if="!showLog" class="fa fa-caret-right"></em>
+            </small>
+            <span class="text-muted">&nbsp;日志信息</span>
+         </h4>
+      </div>
+      <hr class="mv mh" />
+      <div ng-show="showLog" class="ml-lg pl-lg">
+         <div class="table-responsive">
+            <table style="width:99%;max-width:99%" class="table">
+               <tbody>
+                  <tr ng-repeat="config in autoTaskCaseResult.beforeConfigs">
+                     <td style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{$index%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3;'}}">
+                        <div style="margin-left: 15px">
+                           <div class="row">
+                              <div class="text-muted">{{config.config}}
+                                 <span ng-style="{'color': showColor(config.result)}" ng-if="config.result !='Pass'" tooltip="初始化方法执行结果: {{config.result}}" class="label p0">{{config.result}}</span>
+                              </div><i tooltip="{{config.config}}{{config.caseName}}">{{config.caseName | characters:20 :true}}</i>
+                           </div>
+                        </div>
+                     </td>
+                     <td style="width:90%;{{$index==0? 'border-top: 0 solid #eeeeee;':''}}">
+                        <div style="margin-left: 20px">
+                           <div ng-repeat="theLine in config.log.lines" class="row">
+                              <div style="width:2em;margin: 2px 0 0;" ng-style="{'color': showColorLevel(theLine.level)}" class="small mr pull-left">{{theLine.level}}</div>
+                              <div style="width:14em;margin: 2px 0 0;" class="small text-muted mr0 pr0 col-md-1">[{{theLine.date}}]</div>
+                              <div style="margin: 2px 0 0;" ng-bind-html="theLine.line" class="col-md-6"></div>
+                              <div ng-if="theLine.fullLineNum!=null &amp;&amp; theLine.fullLineNum.length&gt;0" title="{{theLine.fullLineNum}}" style="margin: 2px 0 0;" class="pull-right mr-xl pr-xl col-md-2 text-right text-muted small">
+                                 <span class="hide">{{theLine.methodName}}&nbsp;(</span>
+                                 <span ng-if="theLine.gitUrl==null">{{theLine.lineNum}}</span>
+                                 <A ng-if="theLine.gitUrl!=null" href="{{theLine.gitUrl}}" target="_blank" class="text-muted text-underline">{{theLine.lineNum}}</A>
+                                 <span class="hide">)</span>
+                              </div>
+                           </div>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{autoTaskCaseResult.beforeConfigs.length%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3'}}" class="text-bold">
+                        <div style="margin-left: 15px">
+                           <div class="row">
+                              <div class="text-bold">用例执行
+                                 <span ng-style="{'color': showColor(autoTaskCaseResult.result)}" ng-if="autoTaskCaseResult.result !='Pass'" tooltip="用例执行结果: {{autoTaskCaseResult.result}}" class="hide label p0">{{autoTaskCaseResult.result}}</span>
+                              </div><i tooltip="{{autoTaskCaseResult.caseName}}" class="text-normal">{{autoTaskCaseResult.caseName | characters:20 :true}}</i>
+                           </div>
+                        </div>
+                     </td>
+                     <td style="width:90%;{{autoTaskCaseResult.beforeConfigs.length==0? 'border-top: 0 solid #eeeeee;':''}}">
+                        <div style="margin-left: 20px">
+                           <div ng-repeat="theLine in autoTaskCaseResult.log.lines" class="row">
+                              <div style="width:2em;margin: 2px 0 0;" ng-style="{'color': showColorLevel(theLine.level)}" class="small mr pull-left">{{theLine.level}}</div>
+                              <div style="width:14em;margin: 2px 0 0;" class="small text-muted mr0 pr0 col-md-1">[{{theLine.date}}]</div>
+                              <div style="margin: 2px 0 0;" ng-bind-html="theLine.line" class="col-md-6"></div>
+                              <div ng-if="theLine.fullLineNum!=null &amp;&amp; theLine.fullLineNum.length&gt;0" title="{{theLine.fullLineNum}}" style="margin: 2px 0 0;" class="pull-right mr-xl pr-xl col-md-2 text-right text-muted small">
+                                 <span class="hide">{{theLine.methodName}}&nbsp;(</span>
+                                 <span ng-if="theLine.gitUrl==null">{{theLine.lineNum}}</span>
+                                 <A ng-if="theLine.gitUrl!=null" href="{{theLine.gitUrl}}" target="_blank" class="text-muted text-underline">{{theLine.lineNum}}</A>
+                                 <span class="hide">)</span>
+                              </div>
+                           </div>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr ng-repeat="config in autoTaskCaseResult.afterConfigs">
+                     <td style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{(autoTaskCaseResult.beforeConfigs.length+1+ $index)%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3'}}">
+                        <div style="margin-left: 15px">
+                           <div class="row">
+                              <div class="text-muted">{{config.config}}
+                                 <span ng-style="{'color': showColor(config.result)}" ng-if="config.result !='Pass'" tooltip="清除方法执行结果: {{config.result}}" class="label p0">{{config.result}}</span>
+                              </div><i tooltip="{{config.config}}{{config.caseName}}">{{config.caseName | characters:20 :true}}</i>
+                           </div>
+                        </div>
+                     </td>
+                     <td style="width:90%">
+                        <div style="margin-left: 20px">
+                           <div ng-repeat="theLine in config.log.lines" class="row">
+                              <div style="width:2em;margin: 2px 0 0;" ng-style="{'color': showColorLevel(theLine.level)}" class="small mr pull-left">{{theLine.level}}</div>
+                              <div style="width:14em;margin: 2px 0 0;" class="small text-muted mr0 pr0 col-md-1">[{{theLine.date}}]</div>
+                              <div style="margin: 2px 0 0;" ng-bind-html="theLine.line" class="col-md-6"></div>
+                              <div ng-if="theLine.fullLineNum!=null &amp;&amp; theLine.fullLineNum.length&gt;0" title="{{theLine.fullLineNum}}" style="margin: 2px 0 0;" class="pull-right mr-xl pr-xl col-md-2 text-right text-muted small">
+                                 <span class="hide">{{theLine.methodName}}&nbsp;(</span>
+                                 <span ng-if="theLine.gitUrl==null">{{theLine.lineNum}}</span>
+                                 <A ng-if="theLine.gitUrl!=null" href="{{theLine.gitUrl}}" target="_blank" class="text-muted text-underline">{{theLine.lineNum}}</A>
+                                 <span class="hide">)</span>
+                              </div>
+                           </div>
+                        </div>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+   <div ng-if="autoTaskCaseImgs.length&gt;0" class="row mb-lg pb-lg">
+      <div ng-init="showImg = true" ng-click="showImg = !showImg">
+         <h4 class="inline mb0 ml pl">
+            <small>
+               <em ng-if="showImg" class="fa fa-caret-down"></em>
+               <em ng-if="!showImg" class="fa fa-caret-right"></em>
+            </small>
+            <span class="text-muted">&nbsp;屏幕截图</span>
+         </h4>
+      </div>
+      <hr class="mv mh" />
+      <div ng-show="showImg" class="ml-lg pl-lg">
+         <mscarousel interval="0" no-transition="true" slide-width="500" style="height:380px">
+            <msslide ng-repeat="img in autoTaskCaseImgs" active="img.active">
+               <img ng-src="{{img.image}}" style="margin: auto;width:100%;height:100%;" alt="" />
+               <div class="mscarousel-caption">
+                  <h4>截图 {{$index+1}}: {{img.desc}}</h4>
+               </div>
+            </msslide>
+         </mscarousel>
+      </div>
+   </div>
+</div>

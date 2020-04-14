@@ -1,0 +1,178 @@
+// START Top Navbar
+nav.navbar.topnavbar(role='navigation' ng-controller="TopMenuController")
+    // START navbar header
+    .navbar-header
+        .navbar-brand(href='#/')
+            .brand-logo
+                img.img-responsive.pull-left(src='#', alt='')
+                //img.img-responsive.pull-left(display-type="dtpAuto", src='/view/app/img/logo-dtdream-dtp.png', alt='App Logo')
+                //img.img-responsive.pull-left(display-type="dtpPro", src='/view/app/img/logo-dtdream-dtp2.png', alt='App Logo')
+                //a.hidden-xs.pull-right(style="padding: 8px", href='#', ng-click='app.layout.isCollapsed = !app.layout.isCollapsed')
+                    em.fa.fa-navicon
+            //.brand-logo-collapsed
+                img.img-responsive(src='app/img/logo-dtdream-new5.png', alt='App Logo')
+    // END navbar header
+    // START Nav wrapper
+    .nav-wrapper
+        // START Left navbar
+        ul.nav.navbar-nav
+            //li
+                // Button used to collapse the left sidebar. Only visible on tablet and desktops
+                a.hidden-xs(href='#', ng-click='app.layout.isCollapsed = !app.layout.isCollapsed')
+                    em.fa.fa-navicon
+                // Button to show/hide the sidebar on mobile. Visible on mobile only.
+                a.visible-xs.sidebar-toggle(href='#', toggle-state='aside-toggled', no-persist='no-persist')
+                    em.fa.fa-navicon
+            li(ng-repeat="menu in topbarMaintainanceRegionMenuItems", ng-class="getMenuClass(menu)", has-permission="{{menu.permission}}" , display-type="{{menu.display}}")
+                a( ng-click="gotoMenuRoute(menu)", title="{{menu.title}}") {{menu.title}}
+
+            // END User avatar toggle
+            //
+              START lock screen
+              <li>
+              <a ui-sref="page.lock" title="Lock screen">
+              <em class="icon-lock"></em>
+              </a>
+              </li>
+            // END lock screen
+        // END Left navbar
+
+        // START Right Navbar
+        ul.nav.navbar-nav.navbar-right
+            //
+              Search icon
+              <li>
+              <a href="#" search-open="search-open">
+              <em class="icon-magnifier"></em>
+              </a>
+              </li>
+            //li(display-type="dtpPro")
+            //    a(style="height:55px; bottom: 7px")
+            //        select#productSelector.chosen-select.input-md(data-placeholder='产品目录', chosen='', required='', name='chosen', width="'200px'")
+            //li(ng-if="isAdmin")
+            //    a(title='新建产品', ng-click='addProduct()')
+            //        em.fa.fa-plus.fa-fw.mr-sm
+
+            //li(ng-if="isAdmin")
+            //    a(title='Jira产品同步', ng-click='syncAllProductsDialog()')
+            //        em.fa.fa-refresh
+            li(title='在线帮助')
+                a.online-help
+                    em.icon-question
+            // START User avatar toggle
+            li#showList
+                a(style="padding: 18px 15px 18px 15px; display: block")
+                    em.icon-user
+                    span
+                    //span(title="{{loginUser}}", style="font-size: 14px") &nbsp;{{loginUser}}&nbsp;
+                    span.caret
+                .loginList(style="height:34px")
+
+                    div
+                        em &#9670;
+                        span &#9670;
+                        //.interval-top
+                        //    a(href="#", ui-sref="system-management.userpriproducts") 自定义产品
+                        //.interval-top
+                        //    a(href="#", ui-sref="system-management.myselfworkbench") 工作台
+                            //a(ng-if="!item.heading"
+                            //ng-href="#/BOOK/system-management/myselfworkbench" title="工作台" has-permission="" class="ng-scope" href="#/BOOK/system-management/myselfworkbench" class="ng-binding") 工作台
+                        .interval-top
+                            a.logout(href="#") 注销
+            //li.dropdown.dropdown-list.open(dropdown='')
+                a(aria-expanded='true', aria-haspopup='true', dropdown-toggle='')
+                    em.icon-user
+                ul.dropdown-menu.animated.flipInX
+                    li.has-user-block
+                        div(ng-controller='UserBlockController')
+                            .item.user-block
+                                //.user-block-picture
+                                    .user-block-status
+                                        img.img-thumbnail.img-circle(ng-src='{{user.picture}}', alt='Avatar', width='60', height='60')
+                                        .circle.circle-success.circle-lg
+                                .user-block-info
+                                    span.user-block-name {{ 'sidebar.WELCOME' | translate }} {{loginUser}}
+                    li
+                        // START list group
+                        .list-group
+                            // list item
+                            a.list-group-item(href='#')
+                                .media-box
+                                    .pull-right.logout
+                                        button.btn.btn-primary
+                                            i.menu-icon.fa.fa-sign-out
+                                            | 注销
+                        // END list group
+            // Fullscreen (only desktops)
+            li.visible-lg(ng-if="false")
+                a(href='#', toggle-fullscreen='toggle-fullscreen')
+                    em.fa.fa-expand
+            // START Contacts button
+            li(ng-if="false")
+                a(href='#', toggle-state='offsidebar-open', no-persist='no-persist')
+                    em.icon-notebook
+            // END Contacts menu
+        // END Right Navbar
+    // END Nav wrapper
+    // START Search form
+    form.navbar-form(role='search', action='search.html')
+        .form-group.has-feedback
+            input.form-control(type='text', placeholder="{{ 'topbar.search.PLACEHOLDER' | translate }}")
+            .fa.fa-times.form-control-feedback(search-dismiss='search-dismiss')
+        button.hidden.btn.btn-default(type='submit') Submit
+    // END Search form
+// END Top Navbar
+// 确认是否从Jira同步产品
+script#confirmSyncJiraDialog(type='text/ng-template')
+    ngdialog-message
+        .modal-header
+            h3 确认从Jira同步产品？
+        .modal-footer
+            button.btn.btn-primary.mr(type='button', ng-click='confirmSyncJira()') 确定
+            button.btn.btn-default(type='button', ng-click='closeThisDialog()') 取消
+// 新建产品弹框
+script(type='text/ng-template', id='/addProduct.html')
+    form#scriptreload.form-validate.form-horizontal(name='ProductForm', novalidate='')
+        toaster-container(toaster-options="{'position-class': 'toast-center', 'close-button':true}")
+        // START modal
+        .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true', ng-click='cancel()') ×
+            h4#myModalLabel.modal-title 新建产品
+        .modal-body
+            .form-group
+                label.col-sm-2.control-label
+                    span 名称
+                    span(style='color:#ff0000') *
+                .col-sm-10
+                    input#nameInput.form-control(type='text', name='productName', required='', ng-model='product.name', ng-pattern='/^[A-Za-z\\0-9\\u4e00-\\u9fa5\\_\\-]{2,20}$/', placeholder='支持中英文、数字、中划线及下划线(长度为2~20个字符)')
+                    span#nameError.text-danger(ng-show="validateInput('productName', 'pattern')") 产品名称输入不规范
+            .form-group
+                label.col-sm-2.control-label
+                    span 键值
+                    span(style='color:#ff0000') *
+                .col-sm-10
+                    input#keyInput.form-control(type='text', name='productkey', required='', ng-model='product.productkey', ng-pattern='/^[A-Za-z\\0-9\\u4e00-\\u9fa5\\_\\-]{2,20}$/', placeholder='支持中英文、数字、中划线及下划线(长度为2~20个字符)')
+                    span#keyError.text-danger(ng-show="validateInput('productkey', 'pattern')") 产品键值输入不规范
+            //.form-group
+                label.col-sm-2.control-label
+                    span 负责人
+                    span(style='color:#ff0000') *
+                .col-sm-10
+                    input.form-control(type='text', name='productOwner', required='', ng-model='product.owner', ng-pattern='/^[A-Za-z\\0-9\\u4e00-\\u9fa5\\_\\-]{2,20}$/', placeholder='支持中英文、数字、中划线及下划线(2~20个字符)')
+                    span.text-danger(ng-show="validateInput('productOwner', 'pattern')") 产品负责人输入不规范
+            .form-group
+                label.col-sm-2.control-label
+                    span 关联页
+                .col-sm-10
+                    input#pageIdInput.form-control(type='text', name='confluencePageId', ng-model='product.confluencePageId', ng-pattern='/^[0-9]{2,20}$/', placeholder='请输入规范的Confluence页面pageId')
+                    span#pageError.text-danger(ng-show="validateInput('confluencePageId', 'pattern')") 关联页面输入不规范
+            .form-group
+                label.col-sm-2.control-label
+                    | 描述
+                .col-sm-10
+                    input.form-control(type='text', name='productDescription', ng-model='product.description', placeholder='请输入描述')
+        .modal-footer
+            small(style='color:#ff0000;float:left;') *
+            small(style='float:left;') 标记为必填项
+            button.btn.btn-primary(type='button', ng-click='submitForm()') 确定
+            button.btn.btn-default(type='button', ng-click='cancel()') 取消

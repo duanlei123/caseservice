@@ -1,0 +1,172 @@
+h3 {{autoTaskName ? autoTaskName : "#####"}}>执行列表
+    a
+        button.btn.btn-pill-left.btn-default(type='button', ui-sref="auto.auto-task-list")
+            em.fa.fa-mail-reply 返回
+.container-fluid
+    .text-center(ng-if="!autoTaskExecList.length")
+        span(style="font-size: 20px; padding-top: 30px; padding-bottom: 30px;") 任务从未执行
+    .row(ng-if="autoTaskExecList.length > 0")
+        .col-md-2
+            .pr.clearfix.mb.well
+                //input.form-control(placeholder="按年/月/日过滤，Enter", style="margin-bottom: 10px")
+                .mb-boxes
+                    ul.nav.nav-pills.nav-stacked
+                        li(ui-sref-active="active", ng-repeat="autoTaskExec in autoTaskExecList", ng-click="getAutoTaskExecInfo(autoTaskId, autoTaskExec)", ng-style="{'background-color': autoTaskExec.id==currentExec.id ? '#c0d0d3' : ''}")
+                            a
+                                //span.label.pull-right(ng-class="autoTaskExec.jobResult=='SUCCESS' ? 'label-green' : (autoTaskExec.jobResult=='FAILURE' ? 'label-danger' : (autoTaskExec.jobResult=='ABORTED' ? 'label-pink' : 'label-warning'))") {{autoTaskExec.jobResult=='SUCCESS' ? 'S' : (autoTaskExec.jobResult=='FAILURE' ? 'F' : (autoTaskExec.jobResult=='ABORTED' ? 'A' : 'R'))}}
+                                span {{autoTaskExec.jobStartTime | date: "yyyy/MM/dd HH:mm"}}
+        .col-md-10
+            .pr.clearfix.mb.well
+                .pull-right
+                    span.btn-group(ng-if="autoTestSuite.type=='ThreePart' && currentExec.jobResult && autoTaskLog")
+                        a(ng-href="../autotask/downloadAutoTaskLogFile?autoTaskId={{autoTaskId}}&autoTaskExecId={{currentExec.id}}")
+                            button.btn.btn-info.btn-lg 导出
+                    button.btn.btn-info.btn-lg(ng-if="autoTestSuite.type!='ThreePart'", ui-sref="auto.auto-task-report({tid: autoTaskId, eid: currentExec.id})", ng-disabled="currentExec.jobResult==null") 查看报告
+                    button.btn.btn-info.btn-lg(ng-click="refreshExecInfo(autoTaskId, currentExec)")
+                        em.fa.fa-refresh
+                        | 刷新
+                    button.btn.btn-danger.btn-lg(ng-click="openDeleteModal(currentExec.id)", ng-disabled="currentExec.jobResult==null") 删除记录
+                tabset(ng-show="autoTestSuite.type=='ThreePart'")
+                    tab(heading="报告日志")
+                        //a(style="padding: 20px", ng-if="autoTaskLog", ng-href="../autotask/downloadAutoTaskLogFile?autoTaskId={{autoTaskId}}&autoTaskExecId={{currentExec.id}}") 导出
+                        textarea.form-control(style="height: 600px;", ng-model="autoTaskLog", readonly="", block-ui="reportBlockUI", ng-if="currentExec.jobResult!=null && autoTaskLog")
+                        p.text-danger(ng-if="currentExec.jobResult!=null && !autoTaskLog", style="padding: 20px") 获取日志报告异常
+                        p.text-warning(ng-if="currentExec.jobResult==null", style="padding: 20px") 日志未生成，请稍后……
+                tabset(ng-show="autoTestSuite.type!='ThreePart'")
+                    tab(heading="执行概览", select="redrawGraph()")
+                        div(style="margin-top: 10px", block-ui="progressBlockUI")
+                            .modal-header
+                                .row
+                                    .col-sm-5
+                                        h5.modal-title(style="font-weight: bold") 执行状态
+                                            label.label(style="margin-left: 35px", ng-class="currentExec.jobResult=='SUCCESS' ? 'label-success' : (currentExec.jobResult=='FAILURE' ? 'label-danger' : (currentExec.jobResult=='ABORTED' ? 'label-warning' : 'label-dtgreen'))") {{currentExec.jobResult == null ? "RUNNING" : currentExec.jobResult}}
+                                    .col-sm-5(ng-if="currentExec.formatDuration")
+                                        h5.modal-title(style="font-weight: bold") 执行用时
+                                            span(style="margin-left: 35px") {{currentExec.formatDuration}}
+                            .modal-header
+                                .row
+                                    .col-sm-5
+                                        h5.modal-title(style="font-weight: bold") 总体进度
+                                            span(style="margin-left: 35px") {{autoTaskProgress.testCount}}/{{autoTaskProgress.totalCount}}（已测试/总用例）
+                                    .col-sm-5(ng-if="currentExec.jobResult")
+                                        h5.modal-title(style="font-weight: bold") 通过比率
+                                            span(style="margin-left: 35px") {{autoTaskProgress.passRate}}
+                            .modal-body
+                                .row
+                                    .col-sm-4.col-sm-push-1
+                                        .panel.panel-transparent
+                                            .panel-body
+                                                canvas#progressGraph(tooltip="{{autoTaskProgress.percentage}}", classyloader="", data-trigger-in-view="true" data-percentage="", data-speed="0", data-font-size="35px", data-line-color="#0094cb", data-remaining-line-color="rgba(200,200,200,0.4)", data-line-width="10")
+                                    .col-sm-4.col-sm-push-1
+                                        .panel.panel-transparent
+                                            .panel-body
+                                                div#statisticGraph(style="height: 200px")
+                            .modal-header
+                                h5.modal-title(style="font-weight: bold") 模块进度
+                            .modal-body
+                                table.table.table-dtp
+                                    thead
+                                        th 模块
+                                        th Pass
+                                        th Fail
+                                        th Skip
+                                        th Not Test
+                                        th 耗时（约）
+                                        th 通过率
+                                        th 进度
+                                    tbody
+                                        tr(ng-repeat="moduleProgress in autoTaskProgress.moduleProgressList")
+                                            td
+                                                a(ng-click="filterByModule(moduleProgress.packageName)", tooltip="查看模块详情") {{moduleProgress.lastPackageName}}
+                                            td
+                                                a(ng-click="filterByModule(moduleProgress.packageName, 'Pass')")
+                                                    span(style="color: #27c24c") {{moduleProgress.passCount}}
+                                            td
+                                                a(ng-click="filterByModule(moduleProgress.packageName, 'Fail')")
+                                                    span(style="color: #f05050") {{moduleProgress.failCount}}
+                                            td
+                                                a(ng-click="filterByModule(moduleProgress.packageName, 'Skip')")
+                                                    span(style="color: #ff902b") {{moduleProgress.skipCount}}
+                                            td
+                                                a(ng-click="filterByModule(moduleProgress.packageName, 'Not Test')")
+                                                    span {{moduleProgress.notTestCount}}
+                                            td
+                                                span {{moduleProgress.formatDuration}}
+                                            td
+                                                span {{moduleProgress.passRate}}
+                                            td
+                                                span {{moduleProgress.percentage}}
+                    tab(heading="用例结果", active="caseResultTab.active")
+                        .pr.clearfix.mb.well
+                            .col-sm-3
+                                input.form-control(type="text", placeholder="请输入用例或函数名称", ng-model="searchOption.caseName")
+                            .col-sm-1
+                                button.btn.btn-info(ng-click="getAutoTaskCaseResult(currentExec.id)") 搜索
+                            .col-sm-4
+                                ui-select(multiple="", ng-model="searchOption.resultList", ng-change="getAutoTaskCaseResult(currentExec.id)", theme="bootstrap", ng-disabled="disabled", reset-search-input="true")
+                                    ui-select-match(placeholder="按执行结果过滤") {{$item}}
+                                    ui-select-choices(repeat="result in results | filter: $select.search") {{result}}
+                                //.input-group
+                                    span.input-group-btn
+                                        button.btn.btn-default(type="button", title="清空结果", ng-click="clearResults()")
+                                            em.icon-close
+                            .col-sm-3
+                                .input-group
+                                    ui-select(ng-model="searchOption.packageName", ng-change="getAutoTaskCaseResult(currentExec.id)", theme="bootstrap", ng-disabled="disabled", reset-search-input="true")
+                                        ui-select-match(placeholder="按模块过滤") {{$select.selected.lastPackageName}}
+                                        ui-select-choices(repeat="module.packageName as module in caseModuleList | filter: $select.search")
+                                            span(ng-bind-html="module.lastPackageName | highlight: $select.search")
+                                    span.input-group-btn(style="height: 37px")
+                                        button.btn.btn-default(type="button", title="清空模块", ng-click="clearModule()")
+                                            em.icon-close
+                        table.table.table-dtp(ng-table="tableParams", block-ui="resultBlockUI", template-pagination="app/views/ngtable-foot.html")
+                            tbody
+                                tr(ng-repeat="case in $data")
+                                    td(data-title="'用例名称'")
+                                        a(tip-value="{{case.caseDesc}}", max-len-hidden="15", href="{{case.gitUrl}}", target="_blank") {{case.caseDesc}}
+                                    td(data-title="'函数名称'")
+                                        span(tip-value="{{case.caseName}}", max-len-hidden="15") {{case.caseName}}
+                                    td(data-title="'模块'", sortable="'lastPackageName'")
+                                        span {{case.lastPackageName}}
+                                    td(data-title="'测试接口'")
+                                        span(tip-value="{{case.simpleClassName}}", max-len-hidden="15") {{case.simpleClassName}}
+                                    td(data-title="'用例数据'")
+                                        span(tip-value="{{case.data}}", max-len-hidden="15") {{case.data}}
+                                    td(data-title="'执行结果'")
+                                        span(ng-style="{'color': showColor(case.result)}") {{ case.result==null ? 'Not Test' : case.result }}
+                                    td(data-title="'执行时间'", sortable="'totalDuration'")
+                                        span {{case.formatTotalDuration}}
+                                    td(data-title="'日志'")
+                                        a(ui-sref="auto.auto-task-caselog({tid: autoTaskId, eid: currentExec.id, uuid: case.uuid})", target="_blank") 详情
+                                tr.table-nodata-tr(ng-if="!$data.length")
+                                    td(colspan="8")
+                                        .text-center
+                                            span.table-nodata-content 没有符合条件的数据
+                    tab(heading="执行配置")
+                        div(style="margin-top: 10px")
+                            .modal-header
+                                h5.modal-title(style="font-weight: bold;") 执行机
+                                    label.label.b.active.fade.in.smal(style="margin-left: 35px; color: #000") {{autoTaskSummaryObj.slaveName}}
+                            .modal-header
+                                h5.modal-title(style="font-weight: bold;") 参数配置
+                            .modal-body
+                                .form-horizontal
+                                    .table-responsive(style="margin-left:1em;margin-right:5%")
+                                        table.table.table-bordered
+                                            tbody
+                                                tr(ng-repeat="kv in autoTaskSummaryObj.confKvList")
+                                                    td
+                                                        span.text-bold {{kv.key}}
+                                                    td
+                                                        span {{kv.value}}
+                    //tab(heading="控制台输出")
+                        div(ui-scroll-viewport="", style="height: 675px; overflow-y: auto; margin-left: 0em; line-height:normal; font-size: 15px", ng-bind-html="autoTaskExecConsole")
+script(type="text/ng-template", id="confirmDeleteDialog")
+    ngdialog-message
+        .modal-header
+            h4 确认删除本次执行记录
+        .modal-body
+            span.text-danger 即将删除本次任务执行产生的所有数据
+        .modal-footer
+            button.btn.btn-danger.mr(type="button", ng-click="deleteAutoTaskExec(ngDialogData.autoTaskExecId)") 确定
+            button.btn.btn-default(type="button", ng-click="closeThisDialog()") 取消

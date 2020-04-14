@@ -1,9 +1,9 @@
 package com.e.caseservice.dao;
 
-import com.e.caseservice.dto.AutoCaseInfoDto;
-import com.e.caseservice.dto.AutoModuleInfoDto;
-import com.e.caseservice.dto.StatusDto;
-import com.e.caseservice.dto.TestSuitDto;
+import com.e.caseservice.dto.autocase.AutoCaseInfoDto;
+import com.e.caseservice.dto.autocase.AutoModuleInfoDto;
+import com.e.caseservice.dto.autocase.StatusDto;
+import com.e.caseservice.dto.autocase.TestSuitDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -14,9 +14,7 @@ public interface AutoParseCaseDao {
 
     List<StatusDto> getAllStatus();
 
-    void updateTestSuite(@Param("testSuiteId") int testSuiteId, @Param("config") String config,
-                         @Param("info") String info, @Param("status") String status,
-                         @Param("testSuiteVersion") String testSuiteVersion);
+    void updateTestSuite(@Param("testSuiteId") int testSuiteId, @Param("config") String config, @Param("info") String info, @Param("status") String status, @Param("testSuiteVersion") String testSuiteVersion);
 
     TestSuitDto getTestSuit(@Param("testSuiteId") int testSuiteId);
 

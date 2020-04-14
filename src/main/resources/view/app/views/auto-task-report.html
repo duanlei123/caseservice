@@ -1,0 +1,57 @@
+<h3 ng-controller="AutoTaskReportControllerDtpBack">测试报告
+   <a>
+      <button type="button" ui-sref="auto.auto-task-exec({tid:task_id, eid: exec_id})" title="返回自动化测试执行列表" class="btn btn-pill-left btn-default">
+         <em class="fa fa-mail-reply"> 返回</em>
+      </button>
+   </a>
+</h3>
+<div ng-class="inBusy?'whirl traditional':''" ng-controller="AutoTaskReportControllerDtp" class="container-fluid">
+   <style type="text/css">
+      td pre {
+          border: 0;
+      }
+      .autoTitle {
+          display:none
+      }
+   </style>
+   <div class="row mb-lg pb-lg">
+      <div>
+         <div class="pull-right mr-xl mt-sm">
+            <span ng-if="vm.sendResult ==SEND_STATE.SendFail " class="text-danger">发送失败&nbsp;&nbsp;</span>
+            <span ng-if="vm.sendResult ==SEND_STATE.SendOk " class="text-success">发送成功&nbsp;&nbsp;</span>
+            <span dropdown="dropdown" class="btn-group">
+               <button ng-click="sendAutoTaskReport([])" class="btn btn-lg button-create">
+                  <span class="icon icon-envelope"></span>
+                  <span>邮件发送</span>
+               </button>
+               <button dropdown-toggle="" class="btn btn-lg button-create dropdown-toggle">
+                  <span class="caret"></span>
+                  <span class="sr-only">primary</span>
+               </button>
+               <ul role="menu" class="dropdown-menu dropdown-hover-color dt-arrow text-center animated fadeIn">
+                  <li ng-click="openConfirmSendReportModal()"><a>发送到</a>
+                  </li>
+               </ul>
+            </span>
+            <span ng-if="isReportHtmlZipCreated" class="btn-group">
+               <a ng-href="../autotask/downloadReport/{{autoTaskExecId}}/zip/html">
+                  <button class="btn btn-lg btn-info">导出</button>
+               </a>
+            </span>
+         </div>
+         <h2 class="mb0 ml pl"><a ui-sref="auto.auto-task-exec({tid: autoTaskInfo.id, eid: autoTaskExecId})" class="link-unstyled"> {{autoTaskInfo.name}}</a>
+            <small title="执行时间" class="text-muted">&nbsp;&nbsp;&nbsp;{{autoTaskExec.jobStartTime | date:'yyyy-MM-dd HH:mm ' }}</small>
+         </h2>
+      </div>
+      <hr class="mvm h" />
+      <div class="ml-lg pl-lg">
+         <div ui-scroll-viewport="" style="overflow-y: auto;margin-top:15px;line-height:normal">
+            <!--p(ng-bind-html='buildReportOrConsole',style="float: right")-->
+            <p ng-bind-html="autoTaskReport" class="h4"></p>
+         </div>
+      </div>
+   </div>
+</div>
+<script type="text/ng-template" id="/confirmSendReport.html">
+   <form id="receiverForm" name="ReceiverForm" novalidate="" display-type="dtpAuto" class="form-validate form-horizontal"><div class="modal-header"><button type="button" data-dismiss="modal" aria-hidden="true" ng-click="cancel()" class="close">×</button><h4 class="modal-title">任务报告收件人设置</h4></div><div class="modal-body"><div class="form-group"><label class="col-sm-2 control-label"><span>邮箱地址</span></label><div class="col-sm-8"><div ng-repeat="receiver in receiverList track by $index" style="margin-bottom: 8px" class="col-sm-12"><div class="col-sm-10"><input spellcheck="false" required="" type="email" ng-model="receiver.mailAddress" placeholder="请输入收件人邮箱" class="form-control"/></div><div class="col-sm-1"><span ng-click="delEmailAddress($index)" ng-if="receiverList.length &gt; 1" class="fa fa-minus-square btn btn-link">删除</span></div></div></div><span ng-click="addEmailAddress()" class="fa fa-plus-square btn btn-link">添加</span></div></div><div class="modal-footer"><button type="button" ng-click="submitForm()" ng-disabled="!(ReceiverForm.$valid &amp;&amp; receiverList.length &gt; 0)" class="btn btn-primary">确定</button><button type="button" ng-click="cancel()" class="btn btn-default">取消</button></div></form><form display-type="dtpPro" class="form-horizontal"><div class="modal-header"><button type="button" data-dismiss="modal" aria-hidden="true" ng-click="cancel()" class="close">×</button><h4 class="modal-title">邮件发送测试报告，选择收件人</h4></div><div class="modal-body"><div class="form-group"><label style="width:16%;padding-left:0px;padding-top:14px" class="col-sm-2 control-label">收件人:</label><div class="col-sm-10"><p class="input-group form-control-static"><ui-select required="" multiple="" ng-model="vm.receiveUsers" theme="bootstrap" ng-disabled="disabled" reset-search-input="true"><ui-select-match placeholder="支持工号和花名过滤（未选择按正式报告关注人发送）">{{$item.value}}</ui-select-match><ui-select-choices repeat="user.id as user in users | propsFilter: {value: $select.search, data: $select.search}">{{user.value}} &lt;{{user.data}}&gt;</ui-select-choices></ui-select><span class="input-group-btn"><button type="button" ng-click="clearSelectedUsers()" title="清空" class="btn btn-default"><em class="icon-close"></em></button></span></p></div></div></div><div class="modal-footer"><button type="button" ng-click="submitForm()" class="btn btn-primary">发送报告邮件</button><button type="button" ng-click="cancel()" class="btn btn-default">取消</button></div></form>
+</script>

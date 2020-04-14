@@ -1,0 +1,179 @@
+h3(ng-controller="AutoTaskCaseLogControllerDtpBack") 测试用例详情
+    a.hide
+        button.btn.btn-pill-left.btn-default(type='button', ui-sref="auto.auto-task-exec({tid:task_id, eid: exec_id})", title="返回自动化测试执行列表")
+            em.fa.fa-mail-reply  返回
+.container-fluid(ng-class="inBusy?'whirl traditional':''", ng-controller="AutoTaskCaseLogControllerDtp")
+    h3.pb.ml.pl-sm(title="用例名称")
+        a(ng-href="{{autoTaskCaseResult.gitUrl}}", target="_blank") {{autoTaskCaseResult.caseName}}
+        small.text-muted(title="所属模块") {{autoTaskCaseResult.className}}
+        span.text-muted.text-normal(title="耗时", style="font-size: 80%")  ({{autoTaskCaseResult.formatTotalDuration}})
+
+    .row.well.m-lg.pb-lg.pt
+        .row.ml0
+            .row
+                .col-md-1.text-center.visible-md.visible-lg.ph0.pt.mt-lg.thumb48
+                    em.fa.icon-cloud-upload.fa-3x.text-muted.ml
+                .col-md-2
+                    h2.pl-sm.pb-sm.mb-sm(ng-style="{'color': showColor(autoTaskCaseResult.result)}") {{ autoTaskCaseResult.result==null ? 'Not Test' : autoTaskCaseResult.result}}
+            .col-md-12
+                //h2.pl-sm.pb-sm.mb-sm(ng-style="{'color': showColor(autoTaskCaseResult.result)}") {{ autoTaskCaseResult.result==null ? 'Not Test' : autoTaskCaseResult.result}}
+                .row(style="font-size: 14px;")
+                    .col-lg-4
+                        .form-horizontal
+                            .form-group.m0
+                                .col-md-4.text-bold.ph0.control-label 启动时间 :
+                                .col-md-8.text-normal.form-control-static(ng-if="autoTaskCaseResult.startMillis!=null") &nbsp;{{autoTaskCaseResult.startMillis | date:'yyyy-MM-dd HH:mm:ss.sss ' }}
+                                .col-md-8.text-normal.form-control-static(ng-if="autoTaskCaseResult.startMillis==null") &nbsp;
+                            .form-group.m0
+                                .col-md-4.text-bold.ph0.control-label 结束时间 :
+                                .col-md-8.text-normal.form-control-static(ng-if="autoTaskCaseResult.endMillis!=null")   &nbsp;{{autoTaskCaseResult.endMillis | date:'yyyy-MM-dd HH:mm:ss.sss ' }}
+                                .col-md-8.text-normal.form-control-static(ng-if="autoTaskCaseResult.endMillis==null") &nbsp;
+                            .form-group.m0
+                                .col-md-4.text-bold.ph0.control-label 执行时间 :
+                                .col-md-8.text-normall.form-control-static(ng-if="autoTaskCaseResult.duration!=null")  &nbsp;{{autoTaskCaseResult.formatDuration}}
+                                .col-md-8.text-normall.form-control-static(ng-if="autoTaskCaseResult.duration==null") &nbsp;
+                    .col-lg-4
+                        .form-horizontal
+                            .form-group.m0
+                                .col-md-6.text-bold.ph0.control-label BeforeMethod :
+                                .col-md-6.text-normall.form-control-static(ng-if="autoTaskCaseResult.beforeMethodDuration!=null")  &nbsp;{{autoTaskCaseResult.formatBmDuration}}
+                                .col-md-6.text-normall.form-control-static(ng-if="autoTaskCaseResult.beforeMethodDuration==null") &nbsp;
+                            .form-group.m0
+                                .col-md-6.text-bold.ph0.control-label AfterMethod :
+                                .col-md-6.text-normall.form-control-static(ng-if="autoTaskCaseResult.afterMethodDuration!=null")  &nbsp;{{autoTaskCaseResult.formatAmDuration}}
+                                .col-md-6.text-normall.form-control-static(ng-if="autoTaskCaseResult.afterMethodDuration==null") &nbsp;
+                    .col-lg-4
+                        .row
+                            .col-md-12
+                                .form-horizontal
+                                    .form-group.m0
+                                        .col-md-4.text-bold.ph0.control-label 用例描述 :
+                                        .col-md-8.text-normal.form-control-static {{autoTaskCaseResult.caseDesc}}
+                                    .form-group.m0
+                                        .col-md-4.text-bold.ph0.control-label 用例数据 :
+                                        .col-md-8.text-normal.form-control-static(style="word-break: break-all;word-wrap: break-word;") {{autoTaskCaseResult.data}}
+
+    .row.mb-lg.pb-lg(ng-if="hasFailMessage")
+        div(ng-init= "showErrorDetail = true", ng-click="showErrorDetail = !showErrorDetail")
+            h4.inline.mb0.ml.pl
+                small
+                    em.fa.fa-caret-down(ng-if="showErrorDetail")
+                    em.fa.fa-caret-right(ng-if="!showErrorDetail")
+                span.text-muted  &nbsp;失败信息
+            span.ml(title="{{autoTaskCaseResult.failMessage}}") {{autoTaskCaseResult.failMessage | characters:200 :true}}
+        hr.mv.mh
+        .ml-lg.pl-lg(ng-show="showErrorDetail")
+            .table-responsive
+                table.table(style="width:99%;max-width:99%")
+                    tbody
+                        tr(ng-repeat="config in autoTaskCaseResult.beforeConfigs", ng-if='config.failFullMessage!=null && config.failFullMessage.length>0')
+                            td(style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{config.failIndex%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3;'}}")
+                                div(style="margin-left: 15px")
+                                    .row
+                                        div.text-muted {{config.config}}
+                                        i(tooltip="{{config.config}}{{config.caseName}}") {{config.caseName | characters:20 :true}}
+                            td(style="width:90%;{{config.failIndex==0? 'border-top: 0 solid #eeeeee;':''}}")
+                                pre(style="font: inherit;border: none;color: inherit; font-size:96%",ng-bind-html="config.failFullMessage")
+                        tr
+                            td.text-bold(style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{autoTaskCaseResult.failIndex%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3'}}")
+                                div(style="margin-left: 15px")
+                                    .row
+                                        div.text-bold 用例执行
+                                        i.text-normal(tooltip="{{autoTaskCaseResult.caseName}}") {{autoTaskCaseResult.caseName | characters:20 :true}}
+                            td(style="width:90%;{{autoTaskCaseResult.failIndex==0? 'border-top: 0 solid #eeeeee;':''}}")
+                                pre(style="font: inherit;border: none;color: inherit; font-size:96%" ng-bind-html="autoTaskCaseResult.failFullMessage")
+                        tr(ng-repeat="config in autoTaskCaseResult.afterConfigs", ng-if='config.failFullMessage!=null && config.failFullMessage.length>0')
+                            td(style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{config.failIndex%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3;'}}")
+                                div(style="margin-left: 15px")
+                                    .row
+                                        div.text-muted {{config.config}}
+                                        i(tooltip="{{config.config}}{{config.caseName}}") {{config.caseName | characters:20 :true}}
+                            td(style="width:90%;")
+                                pre(style="font: inherit;border: none;color: inherit; font-size:96%" ng-bind-html="config.failFullMessage")
+
+    .row.mb-lg.pb-lg
+        div(ng-init= "showLog = true", ng-click="showLog = !showLog")
+            h4.inline.mb0.ml.pl
+                small
+                    em.fa.fa-caret-down(ng-if="showLog")
+                    em.fa.fa-caret-right(ng-if="!showLog")
+                span.text-muted  &nbsp;日志信息
+        hr.mv.mh
+        .ml-lg.pl-lg(ng-show="showLog")
+            .table-responsive
+                table.table(style="width:99%;max-width:99%")
+                    tbody
+                        tr(ng-repeat="config in autoTaskCaseResult.beforeConfigs")
+                            td(style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{$index%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3;'}}")
+                                div(style="margin-left: 15px")
+                                    .row
+                                        div.text-muted {{config.config}}
+                                            span.label.p0(ng-style="{'color': showColor(config.result)}", ng-if="config.result !='Pass'", tooltip="初始化方法执行结果: {{config.result}}") {{config.result}}
+                                        i(tooltip="{{config.config}}{{config.caseName}}") {{config.caseName | characters:20 :true}}
+                            td(style="width:90%;{{$index==0? 'border-top: 0 solid #eeeeee;':''}}")
+                                div(style="margin-left: 20px")
+                                    .row(ng-repeat="theLine in config.log.lines")
+                                        .small.mr.pull-left(style="width:2em;margin: 2px 0 0;", ng-style="{'color': showColorLevel(theLine.level)}")
+                                            | {{theLine.level}}
+                                        .small.text-muted.mr0.pr0.col-md-1(style="width:14em;margin: 2px 0 0;")
+                                            | [{{theLine.date}}]
+                                        .col-md-6(style="margin: 2px 0 0;", ng-bind-html="theLine.line")
+                                        .pull-right.mr-xl.pr-xl.col-md-2.text-right.text-muted.small(ng-if = "theLine.fullLineNum!=null && theLine.fullLineNum.length>0", title="{{theLine.fullLineNum}}", style="margin: 2px 0 0;")
+                                            span.hide {{theLine.methodName}}&nbsp;(
+                                            span(ng-if="theLine.gitUrl==null") {{theLine.lineNum}}
+                                            A(ng-if="theLine.gitUrl!=null", href="{{theLine.gitUrl}}", target="_blank", class="text-muted").text-underline {{theLine.lineNum}}
+                                            span.hide )
+                        tr
+                            td.text-bold(style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{autoTaskCaseResult.beforeConfigs.length%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3'}}")
+                                div(style="margin-left: 15px")
+                                    .row
+                                        div.text-bold 用例执行
+                                            span.hide.label.p0(ng-style="{'color': showColor(autoTaskCaseResult.result)}", ng-if="autoTaskCaseResult.result !='Pass'", tooltip="用例执行结果: {{autoTaskCaseResult.result}}") {{autoTaskCaseResult.result}}
+                                        i.text-normal(tooltip="{{autoTaskCaseResult.caseName}}") {{autoTaskCaseResult.caseName | characters:20 :true}}
+                            td(style="width:90%;{{autoTaskCaseResult.beforeConfigs.length==0? 'border-top: 0 solid #eeeeee;':''}}")
+                                div(style="margin-left: 20px")
+                                    .row(ng-repeat="theLine in autoTaskCaseResult.log.lines")
+                                        .small.mr.pull-left(style="width:2em;margin: 2px 0 0;", ng-style="{'color': showColorLevel(theLine.level)}")
+                                            | {{theLine.level}}
+                                        .small.text-muted.mr0.pr0.col-md-1(style="width:14em;margin: 2px 0 0;")
+                                            | [{{theLine.date}}]
+                                        .col-md-6(style="margin: 2px 0 0;", ng-bind-html="theLine.line")
+                                        .pull-right.mr-xl.pr-xl.col-md-2.text-right.text-muted.small(ng-if = "theLine.fullLineNum!=null && theLine.fullLineNum.length>0", title="{{theLine.fullLineNum}}", style="margin: 2px 0 0;")
+                                            span.hide {{theLine.methodName}}&nbsp;(
+                                            span(ng-if="theLine.gitUrl==null") {{theLine.lineNum}}
+                                            A(ng-if="theLine.gitUrl!=null", href="{{theLine.gitUrl}}", target="_blank", class="text-muted").text-underline {{theLine.lineNum}}
+                                            span.hide )
+                        tr(ng-repeat="config in autoTaskCaseResult.afterConfigs")
+                            td(style="width:10%;vertical-align:top;border-radius: 4px;border: 1px solid #eeeeee;{{(autoTaskCaseResult.beforeConfigs.length+1+ $index)%2==0?'background-color: #F4F4F4;':'background-color: #FAFAF3'}}")
+                                div(style="margin-left: 15px")
+                                    .row
+                                        div.text-muted {{config.config}}
+                                            span.label.p0(ng-style="{'color': showColor(config.result)}", ng-if="config.result !='Pass'", tooltip="清除方法执行结果: {{config.result}}") {{config.result}}
+                                        i(tooltip="{{config.config}}{{config.caseName}}") {{config.caseName | characters:20 :true}}
+                            td(style="width:90%")
+                                div(style="margin-left: 20px")
+                                    .row(ng-repeat="theLine in config.log.lines")
+                                        .small.mr.pull-left(style="width:2em;margin: 2px 0 0;", ng-style="{'color': showColorLevel(theLine.level)}")
+                                            | {{theLine.level}}
+                                        .small.text-muted.mr0.pr0.col-md-1(style="width:14em;margin: 2px 0 0;")
+                                            | [{{theLine.date}}]
+                                        .col-md-6(style="margin: 2px 0 0;", ng-bind-html="theLine.line")
+                                        .pull-right.mr-xl.pr-xl.col-md-2.text-right.text-muted.small(ng-if = "theLine.fullLineNum!=null && theLine.fullLineNum.length>0", title="{{theLine.fullLineNum}}", style="margin: 2px 0 0;")
+                                            span.hide {{theLine.methodName}}&nbsp;(
+                                            span(ng-if="theLine.gitUrl==null") {{theLine.lineNum}}
+                                            A(ng-if="theLine.gitUrl!=null", href="{{theLine.gitUrl}}", target="_blank", class="text-muted").text-underline {{theLine.lineNum}}
+                                            span.hide )
+    .row.mb-lg.pb-lg(ng-if="autoTaskCaseImgs.length>0")
+        div(ng-init= "showImg = true", ng-click="showImg = !showImg")
+            h4.inline.mb0.ml.pl
+                small
+                    em.fa.fa-caret-down(ng-if="showImg")
+                    em.fa.fa-caret-right(ng-if="!showImg")
+                span.text-muted  &nbsp;屏幕截图
+        hr.mv.mh
+        .ml-lg.pl-lg(ng-show="showImg")
+            mscarousel(interval='0', no-transition='true', slide-width='500', style="height:380px")
+                msslide(ng-repeat='img in autoTaskCaseImgs', active='img.active')
+                    img(ng-src='{{img.image}}', style='margin: auto;width:100%;height:100%;', alt="")
+                    .mscarousel-caption
+                        h4 截图 {{$index+1}}: {{img.desc}}

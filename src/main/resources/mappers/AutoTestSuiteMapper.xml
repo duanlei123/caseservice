@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.e.caseservice.dao.autotest.AutoTestSuiteDao">
+
+<!--    获取测试套列表-->
+    <select id="getTestSuiteList" resultType="com.e.caseservice.dto.autotest.AutoTestSuiteDto">
+        select auto_testsuitelist.*,common_status.name AS chs_name
+        FROM auto_testsuitelist LEFT JOIN common_status ON auto_testsuitelist.status = common_status.id
+        where common_status.id != 2
+          <if test="status != null">
+              and auto_testsuitelist.status = #{status}
+          </if>
+        ORDER BY auto_testsuitelist.id DESC
+    </select>
+
+<!--    获取测试套-->
+    <select id="getTestSuiteByID" resultType="com.e.caseservice.dto.autotest.AutoTestSuiteDto">
+        select * FROM auto_testsuitelist where auto_testsuitelist.id = #{id}
+    </select>
+
+<!--    添加测试套-->
+    <insert id="addTestSuite" parameterType="com.e.caseservice.dto.autotest.AutoTestSuiteDto" useGeneratedKeys="true" keyProperty="autoTestSuiteDto.id">
+        insert into auto_testsuitelist(name, gitUrl, type, confFileName, caseRootPackage, status, description, version,refCount, branch,info,createtime)
+         values(#{autoTestSuiteDto.name},
+                #{autoTestSuiteDto.gitUrl},
+                #{autoTestSuiteDto.type},
+                #{autoTestSuiteDto.confFileName},
+                #{autoTestSuiteDto.caseRootPackage},
+                (select id from common_status where name = 'normal'),
+                #{autoTestSuiteDto.description},
+                #{autoTestSuiteDto.version},
+                #{autoTestSuiteDto.refCount},
+                #{autoTestSuiteDto.branch},
+                #{autoTestSuiteDto.info},
+                #{autoTestSuiteDto.createtime})
+    </insert>
+<!--    更新测试套-->
+    <update id="updateTestSuite" parameterType="com.e.caseservice.dto.autotest.AutoTestSuiteDto">
+        update auto_testsuitelist set
+                                      name = #{autoTestSuiteDto.name},
+                                      gitUrl = #{autoTestSuiteDto.gitUrl},
+                                      type = #{autoTestSuiteDto.type},
+                                      confFileName = #{autoTestSuiteDto.confFileName},
+                                      caseRootPackage = #{autoTestSuiteDto.caseRootPackage},
+                                      description = #{autoTestSuiteDto.description},
+                                      version = #{autoTestSuiteDto.version},
+                                      branch = #{autoTestSuiteDto.branch}
+        where id = #{autoTestSuiteDto.id}
+    </update>
+<!--    删除测试套-->
+    <delete id="deleteTestSuite" parameterType="java.lang.Integer">
+        delete FROM auto_testsuitelist where id = #{id}
+    </delete>
+<!--    搜索测试套-->
+    <select id="getTestSuiteByIDAndName" parameterType="map" resultType="com.e.caseservice.dto.autotest.AutoTestSuiteDto">
+        SELECT * FROM auto_testsuitelist
+        <where>
+            <if test="id != null">
+                AND id != #{id}
+            </if>
+            <if test="name != null">
+            AND name = #{name}
+            </if>
+        </where>
+    </select>
+<!--    更新配置文件-->
+    <update id="updateTestSuitConf" parameterType="map">
+        update auto_testsuitelist set
+            config = #{config}
+        where id = #{id}
+    </update>
+</mapper>

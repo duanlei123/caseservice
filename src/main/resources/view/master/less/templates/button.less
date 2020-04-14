@@ -1,0 +1,205 @@
+/* ========================================================================
+   Component: button.less
+ ========================================================================== */
+
+.button {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 9px 15px;
+  font-size: 14px;
+  line-height: 1.52857143;
+  border-radius: 2px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  min-width: 90px;
+  &.disabled, &[disabled] {
+    cursor: not-allowed;
+  }
+
+  span.icon:first-child, span.fa:first-child{
+    font-size: 16px;
+    vertical-align: middle;
+  }
+}
+
+.button-default {
+  color: #000;
+  background-color: #FDFDFD;
+  border-color: #E2E2E2;
+  &:hover, &:active, &.active {
+    background-color: #F6F6F6;
+    border-color: #CACACA;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    background-color: #FEFEFE;
+    border-color: #E2E2E2;
+    color: #C7CCD0;
+  }
+}
+
+.button-primary {
+  color: #FFF;
+  background-color: #00B4EC;
+  border-color: #00B4EC;
+  &:hover, &:active, &.active {
+    background-color: #00ACE2;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    background-color: #B3E8F9;
+    border-color: #B3E8F9;
+  }
+}
+
+.button-danger {
+  color: #FFF;
+  background-color: #F45F5F;
+  border-color: #F45F5F;
+  &:hover, &:active, &.active {
+    background-color: #DF5757;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    background-color: #FBCECE;
+    border-color: #FBCECE;
+  }
+}
+
+.button-risk {
+  color: #F36565;
+  background-color: #FDFDFD;
+  border-color: #E2E2E2;
+  &:hover, &:active, &.active {
+    background-color: #F06C73;
+    color: #FFF;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    background-color: #FEFEFE;
+    border-color: #E2E2E2;
+    color: #F8CDCD;
+  }
+}
+
+.button-normal {
+  color: #FFF;
+  background-color: #859AB0;
+  border-color: #E2E2E2;
+  &:hover, &:active, &.active {
+    background-color: #93A4B5;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    background-color: #DBE0EB;
+    border-color: #DBE0EB;
+  }
+}
+
+.button-create {
+  color: #4F5F6F;
+  background-color: #FDFDFD;
+  border-color: #E2E2E2;
+  &:hover, &:active, &.active {
+    background-color: #76C470;
+    border-color: #76C470;
+    color: #FFF;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    background-color: #FEFEFE;
+    border-color: #E2E2E2;
+    color: #B1B1B1;
+  }
+}
+
+.button-circle{
+  color: #FFF;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  border: none;
+  background-color: #76c470;
+  text-align: center;
+  line-height: 1.2;
+  vertical-align: bottom;
+  box-shadow: #cacaca 0 2px 4px;
+  em{
+    font-size: 24px;
+  }
+  span{
+    font-size: 14px;
+  }
+
+  &:hover, &:active, &.active {
+    background-color: #67AE62;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    cursor: not-allowed;
+    background-color: #D6EDD4;
+  }
+  &.button-circle-mini{
+    width: 44px;
+    height: 44px;
+    em{
+      font-size: 20px;
+    }
+    span{
+      font-size: 12px;
+    }
+  }
+}
+
+.button-circle.button-circle-purple{
+  background-color: #8B9FE7;
+  &:hover, &:active, &.active {
+    background-color: #7586C5;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    background-color: #DCE2F7;
+  }
+}
+
+.button-circle.button-circle-gray{
+  background-color: #9CA9AF;
+  &:hover, &:active, &.active {
+    background-color: #859399;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    background-color: #E1E5E7;
+  }
+}
+
+.button-circle.button-circle-grblue{
+  background-color: #60A9BE;
+  &:hover, &:active, &.active {
+    background-color: #5697AA;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    background-color: #CFE5EB;
+  }
+}
+
+.button-circle.button-circle-lakegreen{
+  background-color: #65B6A8;
+  &:hover, &:active, &.active {
+    background-color: #5AA396;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    background-color: #D1E9E5;
+  }
+}
+
+.button-circle.button-circle-darkindigo{
+  background-color: #92A4BD;
+  &:hover, &:active, &.active {
+    background-color: #8393A9;
+  }
+  &.disabled, &[disabled], &.disabled:hover, &[disabled]:hover, &.disabled:focus, &[disabled]:focus, &.disabled.focus, &[disabled].focus, &.disabled:active, &[disabled]:active, &.disabled.active, &[disabled].active {
+    background-color: #DEE3EB;
+  }
+}

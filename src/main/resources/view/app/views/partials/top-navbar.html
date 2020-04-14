@@ -1,0 +1,145 @@
+<!-- START Top Navbar-->
+<nav role="navigation" ng-controller="TopMenuController" class="navbar topnavbar">
+   <!-- START navbar header-->
+   <div class="navbar-header">
+      <div href="#/" class="navbar-brand">
+         <div class="brand-logo">
+            <img src="#" alt="" class="img-responsive pull-left" />
+            <!--img.img-responsive.pull-left(display-type="dtpAuto", src='/view/app/img/logo-dtdream-dtp.png', alt='App Logo')-->
+            <!--img.img-responsive.pull-left(display-type="dtpPro", src='/view/app/img/logo-dtdream-dtp2.png', alt='App Logo')-->
+            <!--a.hidden-xs.pull-right(style="padding: 8px", href='#', ng-click='app.layout.isCollapsed = !app.layout.isCollapsed')em.fa.fa-navicon-->
+         </div>
+         <!--.brand-logo-collapsedimg.img-responsive(src='app/img/logo-dtdream-new5.png', alt='App Logo')-->
+      </div>
+   </div>
+   <!-- END navbar header-->
+   <!-- START Nav wrapper-->
+   <div class="nav-wrapper">
+      <!-- START Left navbar-->
+      <ul class="nav navbar-nav">
+         <!--li// Button used to collapse the left sidebar. Only visible on tablet and desktops
+a.hidden-xs(href='#', ng-click='app.layout.isCollapsed = !app.layout.isCollapsed')
+    em.fa.fa-navicon
+// Button to show/hide the sidebar on mobile. Visible on mobile only.
+a.visible-xs.sidebar-toggle(href='#', toggle-state='aside-toggled', no-persist='no-persist')
+    em.fa.fa-navicon-->
+         <li ng-repeat="menu in topbarMaintainanceRegionMenuItems" ng-class="getMenuClass(menu)" has-permission="{{menu.permission}}" display-type="{{menu.display}}"><a ng-click="gotoMenuRoute(menu)" title="{{menu.title}}">{{menu.title}}</a>
+         </li>
+         <!-- END User avatar toggle-->
+         <!--START lock screen
+<li>
+<a ui-sref="page.lock" title="Lock screen">
+<em class="icon-lock"></em>
+</a>
+</li>-->
+         <!-- END lock screen-->
+      </ul>
+      <!-- END Left navbar-->
+      <!-- START Right Navbar-->
+      <ul class="nav navbar-nav navbar-right">
+         <!--Search icon
+<li>
+<a href="#" search-open="search-open">
+<em class="icon-magnifier"></em>
+</a>
+</li>-->
+         <!--li(display-type="dtpPro")-->
+         <!--    a(style="height:55px; bottom: 7px")-->
+         <!--        select#productSelector.chosen-select.input-md(data-placeholder='产品目录', chosen='', required='', name='chosen', width="'200px'")-->
+         <!--li(ng-if="isAdmin")-->
+         <!--    a(title='新建产品', ng-click='addProduct()')-->
+         <!--        em.fa.fa-plus.fa-fw.mr-sm-->
+         <!--li(ng-if="isAdmin")-->
+         <!--    a(title='Jira产品同步', ng-click='syncAllProductsDialog()')-->
+         <!--        em.fa.fa-refresh-->
+         <li title="在线帮助">
+            <a class="online-help">
+               <em class="icon-question"></em>
+            </a>
+         </li>
+         <!-- START User avatar toggle-->
+         <li id="showList">
+            <a style="padding: 18px 15px 18px 15px; display: block">
+               <em class="icon-user"></em>
+               <span></span>
+               <!--span(title="{{loginUser}}", style="font-size: 14px") &nbsp;{{loginUser}}&nbsp;-->
+               <span class="caret"></span>
+            </a>
+            <div style="height:34px" class="loginList">
+               <div>
+                  <em>&#9670;</em>
+                  <span>&#9670;</span>
+                  <!--.interval-top-->
+                  <!--    a(href="#", ui-sref="system-management.userpriproducts") 自定义产品-->
+                  <!--.interval-top-->
+                  <!--    a(href="#", ui-sref="system-management.myselfworkbench") 工作台//a(ng-if="!item.heading"
+//ng-href="#/BOOK/system-management/myselfworkbench" title="工作台" has-permission="" class="ng-scope" href="#/BOOK/system-management/myselfworkbench" class="ng-binding") 工作台-->
+                  <div class="interval-top"><a href="#" class="logout">注销</a>
+                  </div>
+               </div>
+            </div>
+         </li>
+         <!--li.dropdown.dropdown-list.open(dropdown='')a(aria-expanded='true', aria-haspopup='true', dropdown-toggle='')
+    em.icon-user
+ul.dropdown-menu.animated.flipInX
+    li.has-user-block
+        div(ng-controller='UserBlockController')
+            .item.user-block
+                //.user-block-picture
+                    .user-block-status
+                        img.img-thumbnail.img-circle(ng-src='{{user.picture}}', alt='Avatar', width='60', height='60')
+                        .circle.circle-success.circle-lg
+                .user-block-info
+                    span.user-block-name {{ 'sidebar.WELCOME' | translate }} {{loginUser}}
+    li
+        // START list group
+        .list-group
+            // list item
+            a.list-group-item(href='#')
+                .media-box
+                    .pull-right.logout
+                        button.btn.btn-primary
+                            i.menu-icon.fa.fa-sign-out
+                            | 注销
+        // END list group-->
+         <!-- Fullscreen (only desktops)-->
+         <li ng-if="false" class="visible-lg">
+            <a href="#" toggle-fullscreen="toggle-fullscreen">
+               <em class="fa fa-expand"></em>
+            </a>
+         </li>
+         <!-- START Contacts button-->
+         <li ng-if="false">
+            <a href="#" toggle-state="offsidebar-open" no-persist="no-persist">
+               <em class="icon-notebook"></em>
+            </a>
+         </li>
+         <!-- END Contacts menu-->
+      </ul>
+      <!-- END Right Navbar-->
+   </div>
+   <!-- END Nav wrapper-->
+   <!-- START Search form-->
+   <form role="search" action="search.html" class="navbar-form">
+      <div class="form-group has-feedback">
+         <input type="text" placeholder="{{ 'topbar.search.PLACEHOLDER' | translate }}" class="form-control" />
+         <div search-dismiss="search-dismiss" class="fa fa-times form-control-feedback"></div>
+      </div>
+      <button type="submit" class="hidden btn btn-default">Submit</button>
+   </form>
+   <!-- END Search form-->
+</nav>
+<!-- END Top Navbar-->
+<!-- 确认是否从Jira同步产品-->
+<script id="confirmSyncJiraDialog" type="text/ng-template">
+   <ngdialog-message><div class="modal-header"><h3>确认从Jira同步产品？</h3></div><div class="modal-footer"><button type="button" ng-click="confirmSyncJira()" class="btn btn-primary mr">确定</button><button type="button" ng-click="closeThisDialog()" class="btn btn-default">取消</button></div></ngdialog-message>
+</script>
+<!-- 新建产品弹框-->
+<script type="text/ng-template" id="/addProduct.html">
+   <form id="scriptreload" name="ProductForm" novalidate="" class="form-validate form-horizontal"><toaster-container toaster-options="{'position-class': 'toast-center', 'close-button':true}"></toaster-container><!-- START modal--><div class="modal-header"><button type="button" data-dismiss="modal" aria-hidden="true" ng-click="cancel()" class="close">×</button><h4 id="myModalLabel" class="modal-title">新建产品</h4></div><div class="modal-body"><div class="form-group"><label class="col-sm-2 control-label"><span>名称</span><span style="color:#ff0000">*</span></label><div class="col-sm-10"><input id="nameInput" type="text" name="productName" required="" ng-model="product.name" ng-pattern="/^[A-Za-z\0-9\u4e00-\u9fa5\_\-]{2,20}$/" placeholder="支持中英文、数字、中划线及下划线(长度为2~20个字符)" class="form-control"/><span id="nameError" ng-show="validateInput('productName', 'pattern')" class="text-danger">产品名称输入不规范</span></div></div><div class="form-group"><label class="col-sm-2 control-label"><span>键值</span><span style="color:#ff0000">*</span></label><div class="col-sm-10"><input id="keyInput" type="text" name="productkey" required="" ng-model="product.productkey" ng-pattern="/^[A-Za-z\0-9\u4e00-\u9fa5\_\-]{2,20}$/" placeholder="支持中英文、数字、中划线及下划线(长度为2~20个字符)" class="form-control"/><span id="keyError" ng-show="validateInput('productkey', 'pattern')" class="text-danger">产品键值输入不规范</span></div></div><!--.form-grouplabel.col-sm-2.control-label
+       span 负责人
+       span(style='color:#ff0000') *
+   .col-sm-10
+       input.form-control(type='text', name='productOwner', required='', ng-model='product.owner', ng-pattern='/^[A-Za-z\\0-9\\u4e00-\\u9fa5\\_\\-]{2,20}$/', placeholder='支持中英文、数字、中划线及下划线(2~20个字符)')
+       span.text-danger(ng-show="validateInput('productOwner', 'pattern')") 产品负责人输入不规范--><div class="form-group"><label class="col-sm-2 control-label"><span>关联页</span></label><div class="col-sm-10"><input id="pageIdInput" type="text" name="confluencePageId" ng-model="product.confluencePageId" ng-pattern="/^[0-9]{2,20}$/" placeholder="请输入规范的Confluence页面pageId" class="form-control"/><span id="pageError" ng-show="validateInput('confluencePageId', 'pattern')" class="text-danger">关联页面输入不规范</span></div></div><div class="form-group"><label class="col-sm-2 control-label">描述</label><div class="col-sm-10"><input type="text" name="productDescription" ng-model="product.description" placeholder="请输入描述" class="form-control"/></div></div></div><div class="modal-footer"><small style="color:#ff0000;float:left;">*</small><small style="float:left;">标记为必填项</small><button type="button" ng-click="submitForm()" class="btn btn-primary">确定</button><button type="button" ng-click="cancel()" class="btn btn-default">取消</button></div></form>
+</script>

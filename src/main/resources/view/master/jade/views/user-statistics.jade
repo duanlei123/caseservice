@@ -1,0 +1,14 @@
+h3 用户统计
+.container-fluid(ng-controller='UserStatisticsControllerDtp')
+    .row(style="margin:20px 0px")
+        .col-md-6(style="width:10%")
+            h5 本日登录用户数:
+        .col-md-6(style="width:10%")
+            h5 {{UserNumberOfToday}}
+            //h5 day:
+    .row(style="margin:20px 0px")
+        .col-md-6(style="width:10%")
+            h5 本月登录用户数:
+        .col-md-6(style="width:10%")
+            h5 {{UserNumberOfCurrentMonth}}
+            //h5 month:

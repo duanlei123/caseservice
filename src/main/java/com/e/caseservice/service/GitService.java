@@ -41,10 +41,15 @@ class GitService {
         this.httpURL = gitOriUrl.getProtocol() + "://" + gitOriUrl.getHost() + port + "/";
 
         gitlabApi = GitlabApiUtils.getGitlabApi(httpURL, username, password);
+        if (gitlabApi == null){
+            //gitlab认证失败
+            return false;
+        }
         try {
             this.gitProjectName = gitOriUrl.getPath().substring(1).replaceAll("\\.git", "");
         } catch (Exception e) {
             LOGGER.error("解析(测试套工程)项目名称失败错误", e);
+            return false;
         }
         this.savePath = savePath;
         this.branchName = branchName;

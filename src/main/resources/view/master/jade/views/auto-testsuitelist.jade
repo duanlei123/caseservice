@@ -1,0 +1,382 @@
+h3 测试套列表
+.container-fluid(ng-controller="AutoTestSuiteCtrl")
+    .search-dtp-row
+        .pull-left.col-dtp(style="padding: 10px")
+            span 测试套列表总计：{{getTestSuiteList.length}}
+        .pull-right.col-dtp
+            button.btn.btn-dtgreen.mb(type="button", ng-click="addTestSuite()") 新建测试套
+            button.btn.btn-info.mb(ng-click="gettestsuitelist()")
+                em.fa.fa-refresh
+                | 刷新
+    table.table.table-dtp(ng-table="tableParams", block-ui="myBlockUI", template-pagination="app/views/ngtable-foot.html")
+        tbody
+            tr(ng-repeat="testSuite in $data")
+                td(data-title="'名称'")
+                    span(tip-value="{{testSuite.name}}", max-len-hidden="20") {{testSuite.name}}
+                td(data-title="'类型'")
+                    span {{testSuite.type}}
+                    //span {{testSuite.type}}
+                td(data-title="'版本'")
+                    span {{testSuite.version}}
+                td(data-title="'状态'")
+                    span
+                        label.label(ng-class="showColorByStatus(testSuite.chs_name)", style="width: 75px; display: inline-block") {{testSuite.chs_name}}
+                td(data-title="'地址'")
+                    span(tip-value="{{testSuite.gitUrl}}", max-len-hidden="35") {{testSuite.gitUrl}}
+                td(data-title="'描述'")
+                    span(tip-value="{{testSuite.description ? testSuite.description : '--'}}", max-len-hidden="30") {{testSuite.description ? testSuite.description : "--"}}
+                td(data-title="'操作日志'")
+                    span(tip-value="{{testSuite.info}}", max-len-hidden="35") {{testSuite.info}}
+                td(data-title="'同步'")
+                    a(ng-click="synchronization(testSuite)") 同步
+                td(data-title="'操作'")
+                    .btn-group(dropdown="dropdown", style="vertical-align: top")
+                        a.dropdown-toggle(href="", dropdown-toggle="") 管理
+                        ul.dropdown-menu.animated.fadeInDown(role="menu")
+                            li
+                                a(ng-click="editTestSuite(testSuite)") 编辑
+                            li
+                                a(ng-click="openTestSuitEnvModal(testSuite)") 配置修改
+                            li
+                                a(ng-click="openDeleteDialog(testSuite)") 删除
+                            //li(ng-if="testSuite.status==20")
+                                a(ng-click="showGitProjectLog(testSuite.gitUrl)") 查看上传日志
+                            //li
+                                a(ng-click="showGitProjectLog(testSuite.gitUrl)") 查看上传日志
+            tr.table-nodata-tr(ng-if="!$data.length")
+                td(colspan="8")
+                    .text-center
+                        span.table-nodata-content 没有符合条件的数据
+// 添加
+script(type="text/ng-template", id='/addTestSuite')
+    form.form-validate.form-horizontal(name="addTestSuiteForm", novalidate="",id="addTestSuite")
+        // toaster-container(toaster-options="{'position-class': 'toast-center', 'close-button':true}")
+        // START modal
+        .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true', ng-click='cancel()') ×
+            h4.modal-title 新建测试套
+        .modal-body
+            .form-group
+                label.col-md-3.control-label
+                    span(style="color:red") *
+                    | 名称
+                .col-md-8
+                    input.form-control(type='text', name='testsuite.name', required='', ng-model="testsuite.name", ng-pattern="/^[A-Za-z0-9\\u4e00-\\u9fa5_-]{2,30}$/",
+                    placeholder='仅能包含字母、数字、中划线、下划线或中文')
+                    span.text-danger(ng-show="validateInput('testsuite.name', 'required')") 测试套名称不能为空
+                    span.text-danger(ng-show="validateInput('testsuite.name', 'pattern')") 仅能包含字母、数字、中划线、下划线或中文，长度为2~30个字符
+            .form-group
+                label.col-md-3.control-label
+                    span(style="color:red", ) *
+                    span 类型
+                .col-md-8
+                    p.form-control-static(style="padding-left: 10px;")
+                        label.radio-inline.c-radio
+                            input(type="radio", value="API", ng-model="testsuite.type", ng-init="testsuite.type='API'")
+                            span.fa.fa-circle
+                            |  API
+                        //label.radio-inline.c-radio
+                            input(type="radio", value="WEB", ng-model="testsuite.type")
+                            span.fa.fa-circle
+                            |  WEB
+                        label.radio-inline.c-radio
+                            input(type="radio", value="ThreePart", ng-model="testsuite.type")
+                            span.fa.fa-circle
+                            |  ThreePart
+            //.form-group
+                label.col-md-3.control-label
+                    span(style="color:red", ) *
+                    span 创建形式
+                .col-md-8
+                    p.form-control-static(style="padding-left: 10px;")
+                        label.radio-inline.c-radio
+                            input(type="radio", value="http", ng-model="gitType")
+                            span.fa.fa-circle
+                            |  gitUrl
+                        label.radio-inline.c-radio
+                            input(type="radio", value="zip", ng-model="gitType")
+                            span.fa.fa-circle
+                            |  zip上传
+            .form-group
+                label.col-md-3.control-label
+                    span(style="color:red") *
+                    | git地址
+                .col-md-8
+                    input.form-control(type='text', name='testsuite.gitUrl', required='', ng-model="testsuite.gitUrl", ng-pattern="/^http://.+/.+/.+(\\.git$)/",
+                    placeholder='http://****/*****/***.git')
+                    span.text-danger(ng-show="validateInput('testsuite.gitUrl', 'required')") 测试套git地址不能为空
+                    span.text-danger(ng-show="validateInput('testsuite.gitUrl', 'pattern')")  请输入符合http://****/*****/***.git形式的测试套git地址
+            //.form-group(ng-show="gitType=='zip'")
+                label.col-md-3.control-label
+                    span(style="color:red") *
+                    | 项目名称
+                .col-md-8
+                    input.form-control(type='text', name='gitProjectName', required='', ng-model="gitProjectName", ng-pattern="/^[A-Za-z0-9_][A-Za-z0-9_-]{0,34}$/",
+                    placeholder='仅含字母、数字、中划线及下划线，不以中划线开头')
+                    span.text-danger(ng-show="validateInput('gitProjectName', 'required')") 项目名称不能为空
+                    span.text-danger(ng-show="validateInput('gitProjectName', 'pattern')") 仅含字母、数字、中划线及下划线，且不以中划线开头，不可超过35个字符
+            //.form-group(ng-show="gitType=='zip'")
+                //.col-md-12
+                .row
+                    .col-sm-12
+                        label.col-md-3.control-label
+                            span(style="color:red") *
+                            |测试集
+                        .col-md-8
+                            input.form-control(filestyle="", type='file', data-button-text="浏览", data-class-button='btn btn-default', data-classinput="form-control inline", nv-file-select='', uploader='uploader')
+                    //.col-md-12(ng-if="uploader.queue.length")
+                    .col-sm-12
+                        label.col-md-3.control-label
+                        .col-md-8(ng-if="uploader.queue.length")
+                            table.table(ng-if="uploader.queue.length")
+                                thead
+                                    tr
+                                        th(width="50%") Name
+                                        th(ng-show="uploader.isHTML5") Size
+                                        th Actions
+                                tbody
+                                    tr(ng-repeat="item in uploader.queue")
+                                        td
+                                            strong {{ item.file.name }}
+                                        td(ng-show="uploader.isHTML5", nowrap="") {{ item.file.size/1024/1024 | number:2 }} MB
+                                        td(nowrap="")
+                                            button.btn.btn-danger.btn-xs(type="button", ng-click="uploader.clearQueue()")
+                                                span.icon-trash.mr
+                                                |  Remove
+                //.col-md-9
+                    .panel
+                        .panel-body
+                            //p.lead.text-center(ng-if="!uploader.queue.length") 请选择zip格式测试套压缩包...
+                            div(ng-if="uploader.queue.length")
+                                span
+                                    strong {{ uploader.queue[0].file.name }}&nbsp;&nbsp;
+                                span(ng-show='uploader.isHTML5', nowrap='') {{ uploader.queue[0].file.size/1024/1024|number:2 }} MB
+                                br
+                                button.btn.btn-danger.btn-xs.pull-right(type='button', ng-click='uploader.clearQueue()')
+                                    span.icon-trash.mr
+                                    |  Remove
+            .form-group
+                label.col-md-3.control-label
+                    span 配置文件名
+                .col-md-8
+                    input.form-control(type='text', name='testsuite.confFileName', ng-init="testsuite.confFileName='conf.properties'", ng-model="testsuite.confFileName", placeholder="默认以“conf.properties”作为配置文件")
+            .form-group
+                label.col-md-3.control-label
+                    span 用例根目录
+                .col-md-8
+                    input.form-control(type='text', name='testsuite.caseRootPackage', ng-init="testsuite.caseRootPackage='testcase'", ng-model="testsuite.caseRootPackage", placeholder="默认以“testcase”作为用例根目录")
+            .form-group
+                label.col-md-3.control-label
+                    span(style="color:red")
+                    | 描述
+                .col-md-8
+                    input.form-control(type='text', name='testsuite.description', ng-model="testsuite.description", maxlength="500",
+                    placeholder='长度为0~500个字符')
+                    span.text-danger(ng-show="validateInput('testsuite.description', 'pattern')") 仅能包含字母或中文字符，最大长度为500个字符
+        .modal-footer
+            small(style="color:red;float:left;") *
+            small(style="float:left;") 标记为必填项
+            button.btn.btn-primary(type='button', ng-click='submitForm()') 确定
+            button.btn.btn-default(type='button', ng-click='cancel()') 取消
+// 编辑
+script(type="text/ng-template", id='/editTestSuite')
+    form.form-validate.form-horizontal(name="editTestSuiteForm", novalidate="",id="editTestSuite")
+        // toaster-container(toaster-options="{'position-class': 'toast-center', 'close-button':true}")
+        // START modal
+        .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true', ng-click='cancel()') ×
+            h4.modal-title 编辑测试套
+        .modal-body
+            .form-group
+                label.col-md-3.control-label
+                    span(style="color:red") *
+                    | 名称
+                .col-md-8
+                    input.form-control(type='text', name='testsuite.name', required='', ng-model="testsuite.name", ng-pattern="/^[A-Za-z0-9\\u4e00-\\u9fa5_-]{2,30}$/",
+                    placeholder='仅能包含字母、数字、中划线、下划线或中文')
+                    span.text-danger(ng-show="validateInput('testsuite.name', 'required')") 项目名称不能为空
+                    span.text-danger(ng-show="validateInput('testsuite.name', 'pattern')") 仅能包含字母、数字、中划线、下划线或中文，长度为2~30个字符
+            .form-group
+                label.col-md-3.control-label
+                    span(style="color:red") *
+                    | git地址
+                .col-md-8
+                    input.form-control(type='text', name='testsuite.gitUrl', readonly="true", ng-model="testsuite.gitUrl")
+            .form-group
+                label.col-md-3.control-label
+                    span(style="color:red") *
+                    span 类型
+                .col-md-8
+                    p.form-control-static(style="padding-left: 10px;")
+                        label.radio-inline.c-radio
+                            input(ng-disabled='true',type="radio", value="API", ng-model="testsuite.type")
+                            span.fa.fa-circle
+                            |  API
+                        //label.radio-inline.c-radio
+                            input(ng-disabled='true',type="radio", value="WEB", ng-model="testsuite.type")
+                            span.fa.fa-circle
+                            |  WEB
+                        label.radio-inline.c-radio
+                            input(ng-disabled='true',type="radio", value="ThreePart", ng-model="testsuite.type")
+                            span.fa.fa-circle
+                            |  ThreePart
+            .form-group
+                label.col-md-3.control-label
+                    span 配置文件名
+                .col-md-8
+                    input.form-control(readonly="", type='text', name='testsuite.confFileName', ng-model="testsuite.confFileName", placeholder="默认以“conf.properties”作为配置文件")
+            .form-group
+                label.col-md-3.control-label
+                    span 用例根目录
+                .col-md-8
+                    input.form-control(readonly="", type='text', name='testsuite.caseRootPackage', ng-model="testsuite.caseRootPackage", placeholder="默认以“testcase”作为用例根目录")
+            //.form-group
+                .row
+                    .col-md-12
+                        label.col-md-3.control-label
+                            span 上传更新
+                        .col-md-8
+                            input.form-control(filestyle="", type='file', data-button-text="浏览", data-class-button='btn btn-default', data-classinput="form-control inline", nv-file-select='', uploader='uploader')
+                    //.col-md-12(ng-if="uploader.queue.length")
+                    .col-md-12
+                        label.col-md-3.control-label
+                        .col-md-8(ng-if="uploader.queue.length")
+                            table.table(ng-if="uploader.queue.length")
+                                thead
+                                    tr
+                                        th(width="50%") Name
+                                        th(ng-show="uploader.isHTML5") Size
+                                        th Actions
+                                tbody
+                                    tr(ng-repeat="item in uploader.queue")
+                                        td
+                                            strong {{ item.file.name }}
+                                        td(ng-show="uploader.isHTML5", nowrap="") {{ item.file.size/1024/1024 | number:2 }} MB
+                                        td(nowrap="")
+                                            button.btn.btn-danger.btn-xs(type="button", ng-click="uploader.clearQueue()")
+                                                span.icon-trash.mr
+                                                |  Remove
+                //.col-md-9
+                    .panel
+                        .panel-body
+                            //p.lead.text-center(ng-if="!uploader.queue.length") 请选择zip格式测试套压缩包...
+                            div(ng-if="uploader.queue.length")
+                                span
+                                    strong {{ uploader.queue[0].file.name }}&nbsp;&nbsp;
+                                span(ng-show='uploader.isHTML5', nowrap='') {{ uploader.queue[0].file.size/1024/1024|number:2 }} MB
+                                br
+                                button.btn.btn-danger.btn-xs.pull-right(type='button', ng-click='uploader.clearQueue()')
+                                    span.icon-trash.mr
+                                    |  Remove
+            .form-group
+                label.col-md-3.control-label
+                    span(style="color:red")
+                    | 描述
+                .col-md-8
+                    input.form-control(type='text', name='testsuite.description', ng-model="testsuite.description", maxlength="500", placeholder='长度为0~500个字符')
+                    span.text-danger(ng-show="validateInput('testsuite.description')") 仅能包含字母或中文字符，最大长度为500个字符
+        .modal-footer
+            small(style="color:red;float:left;") *
+            small(style="float:left;") 标记为必填项
+            button.btn.btn-primary(type='button', ng-click='editFormSubmit()') 确定
+            button.btn.btn-default(type='button', ng-click='cancel()') 取消
+// 删除
+script(type="text/ng-template", id="confirmDeleteDialog")
+    ngdialog-message
+        .modal-header
+            h4 确认删除此测试套“{{ ngDialogData.TestSuite.name }}”？
+        .modal-footer
+            button.btn.btn-danger.mr(type='button', ng-click='deleteTestSuite(ngDialogData.TestSuite)') 确定
+            button.btn.btn-default(type='button', ng-click="closeThisDialog()") 取消
+// 修改配置, 导入配置, 导出配置
+script(type="text/ng-template", id="/TestSuitEnvModal.html")
+    form#templateForm.form-validate.form-horizontal(name="TestEnvForm", novalidate="")
+        .modal-header
+            button.close(type="button", data-dismiss="modal", aria-hidden="true", ng-click="cancel()") ×
+            h4.modal-title(ng-if="importConfs==0")  测试套参数配置
+            h4.modal-title(ng-if="importConfs==1")  导入配置文件
+        .modal-body
+            //span.text-warning(style="font-size: 15px;", ng-if="!confKvList.length") 无参数配置项
+            .table-responsive
+                table.table.table-striped.table-bordered.table-hover
+                    tbody
+                        tr(ng-show="importConfs==0")
+                            td
+                                .col-sm-6
+                                .col-sm-2.col-sm-push-2(ng-if="confKvList.length > 0")
+                                    button.btn.btn-oval.btn-info(type="button", ng-click="exportConf()") 配置导出
+                                .col-sm-2.col-sm-push-2
+                                    button.btn.btn-oval.btn-info(type="button", ng-click="importConf()") 配置导入
+                        tr(ng-show="importConfs==1")
+                            td
+                                .col-sm-8
+                                    input.form-control(filestyle="", type='file', data-button-text="浏览", data-class-button="btn btn-default", data-classinput="form-control inline", nv-file-select="", uploader="uploader")
+                        tr(ng-show="importConfs==1",ng-if="uploader.queue.length")
+                            td
+                                .col-sm-6
+                                    span Name
+                            td(ng-show="uploader.isHTML5")
+                                .col-sm-3
+                                    span Size
+                            td
+                                .col-sm-3
+                                    span Actions
+                        tr(ng-show="importConfs==1",ng-repeat="item in uploader.queue",ng-if="uploader.queue.length")
+                            td
+                                .col-sm-6
+                                    strong {{ item.file.name }}
+                            td(ng-show="uploader.isHTML5", nowrap="")
+                                .col-sm-3
+                                    span {{ item.file.size/1024/1024 | number:2 }} MB
+                            td(nowrap="")
+                                .col-sm-3
+                                    button.btn.btn-danger.btn-xs(type="button", ng-click="remove()")
+                                        span.icon-trash.mr
+                                        |  Remove
+                        tr(ng-repeat="kv in confKvList",ng-show="importConfs==0")
+                            td
+                                .col-sm-4
+                                     input.form-control(ng-disabled="true", type="text", ng-model="kv.key", placeholder="键名")
+                                .col-sm-8
+                                    input.form-control(type="text", ng-model="kv.value", placeholder="值", spellcheck="false")
+        .modal-footer(ng-show="importConfs==0")
+                button.btn.btn-primary(type="button", ng-click="submitForm()") 确定
+                button.btn.btn-default(type="button", ng-click="cancel()") 取消
+        .modal-footer(ng-show="importConfs==1")
+            button.btn.btn-primary(type="button", ng-click="exportSubmitForm()") 确定
+            button.btn.btn-default(type="button", ng-click="exportCancel()") 取消
+
+script(type="text/ng-template", id="/ShowGitPushLog")
+    .modal-header
+        button.close(type="button", data-dismiss="modal", aria-hidden="true", ng-click="cancel()") ×
+        h3 上次更新日志
+    .modal-body
+        span  {{gitPushLog}}
+        //p(ng-bind-html='gitPushLog')
+    .modal-footer
+        button.btn.btn-default(type="button", ng-click="cancel()") 退出
+
+// 同步
+script(type="text/ng-template", id="/synchronization")
+    form.form-validate.form-horizontal(name="synchronizationForm", novalidate="", id="synchronization")
+        .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true', ng-click='cancel()') ×
+            h4.modal-title 同步解析测试套
+        .modal-body
+            .form-group
+                label.col-md-3.control-label
+                    span(style="color:red") *
+                    span git用户名
+                .col-md-8
+                    input.form-control(type='text',name='testsuite.gitusername',ng-model='testsuite.gitusername', placeholder="gitlab用户名,请确保有库权限")
+            .form-group
+                label.col-md-3.control-label
+                    span(style="color:red") *
+                    | git密码
+                .col-md-8
+                    input.form-control(type='password',name='testsuite.gitpassword', ng-model='testsuite.gitpassword')
+        .modal-footer
+            small(style="color:red;float:left;") *
+            small(style="float:left;") 标记为必填项
+            button.btn.btn-primary(type='button', ng-click='synchronizationFormSubmit()') 确定
+            button.btn.btn-default(type='button', ng-click='cancel()') 取消

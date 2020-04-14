@@ -1,0 +1,494 @@
+h3 任务列表>{{isEditTask ? "编辑任务" : "新建任务"}}
+    a
+        button.btn.btn-pill-left.btn-default(type="button", ui-sref="auto.auto-task-list")
+            em.fa.fa-mail-reply 返回
+
+.container-fluid#pageArea
+    style(type='text/css').
+        .CodeMirror {
+            border: 1px solid #dde6e9;
+            border-radius: 4px;
+        }
+        .CodeMirror-focused {
+            border: 1px solid #66afe9;
+        }
+        .CodeMirror pre.CodeMirror-placeholder {
+            color: #999;
+        }
+        .cm-s-base16-light span.cm-builtin, .cm-s-base16-light span.cm-special {
+            color: #5d9cec;
+        }
+        .CodeMirror-hscrollbar {
+            height: 5px;
+        }
+    .form-group
+        dl.bk-group(data-title="基本信息配置", data-disabled="false")
+            dt.bk-group-title 基本信息配置
+            dd.bk-group-detail
+                .bk-group
+                    form.form-validate(name="autoTaskForm", novalidate="")
+                        .bk-form-row
+                            label.bk-form-row-name
+                                span.text-danger *
+                                | 任务名称：
+                            .bk-form-row-cell
+                                .bk-form-row-li.col-lg-12(style="float:left")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            input.form-control(spellcheck="false", type="text", required="", name="autoTaskName", ng-model="autoTaskSummaryObj.name", placeholder="", ng-pattern="/^[0-9a-zA-Z\\u4e00-\\u9fa5_-]{3,35}$/")
+                                .bk-form-row-txt
+                                    span 仅能包含字母、数字、中划线、下划线或中文，长度为3-35个字符
+                        .bk-form-row
+                            label.bk-form-row-name
+                                span.text-danger *
+                                | 测试套：
+                            .bk-form-row-cell
+                                .bk-form-row-li.col-lg-12(style="float:left")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            div
+                                                ui-select.text-left.ng-invalid(ng-model="autoTaskSummaryObj.testSuiteId", theme="bootstrap", ng-disabled="autoTaskId!=null", ng-change="changeTestSuite($select.selected)", reset-search-input="true")
+                                                    ui-select-match(placeholder="请选择产品测试套") {{$select.selected.name}}
+                                                    ui-select-choices(repeat="testSuite.id as testSuite in testSuiteList | filter: $select.search")
+                                                        span(ng-bind-html="testSuite.name | highlight: $select.search")
+                        .bk-form-row(ng-if="curTestSuite.type=='WEB'")
+                            label.bk-form-row-name
+                                span.text-danger *
+                                | 浏览器：
+                            .bk-form-row-cell
+                                .bk-form-row-li.col-lg-12(style="float:left")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            div
+                                                ui-select.text-left.ng-invalid(ng-model="autoTaskSummaryObj.browser", theme="bootstrap", ng-disabled="disabled", reset-search-input="true")
+                                                    ui-select-match(placeholder="Web页面测试套可选") {{$select.selected}}
+                                                    ui-select-choices(repeat="browser in browserList | filter: $select.search")
+                                                        span(ng-bind-html="browser | highlight: $select.search")
+                        .bk-form-row
+                            label.bk-form-row-name
+                                span.text-danger *
+                                | 执行机：
+                            .bk-form-row-cell
+                                .bk-form-row-li.col-lg-12(style="float:left")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            div
+                                                ui-select.text-left.ng-invalid(ng-model="autoTaskSummaryObj.slaveId", theme="bootstrap", ng-disabled="disabled", reset-search-input="true")
+                                                    ui-select-match(placeholder="请选择执行机") {{$select.selected.name}}
+                                                    ui-select-choices(repeat="slave.id as slave in slaveList | filter: $select.search")
+                                                        span(ng-bind-html="slave.name | highlight: $select.search")
+                        .bk-form-row
+                            label.bk-form-row-name
+                                span.text-danger *
+                                | 启动方式：
+                            div(style="margin-left: 140px")
+                                .col-lg-12(style="float:left")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            p.form-control-static
+                                                label.radio-inline.c-radio
+                                                    input.form-control(type="radio", value="annual", ng-model="autoTaskSummaryObj.triggerOption")
+                                                    span.fa.fa-circle
+                                                    | 手工
+                                                    a
+                                                        em.fa.fa-user(style="margin-right: 10px; color: #8EC95B")
+                                                label.radio-inline.c-radio
+                                                    input.form-control(type="radio", value="timed", ng-model="autoTaskSummaryObj.triggerOption")
+                                                    span.fa.fa-circle
+                                                    | 周期定时
+                                                    a
+                                                        em.fa.fa-clock-o(style="margin-right: 10px; color: #8EC95B")
+                                                    a(href="#", tooltip="周期定时策略：开始时间表示任务每日首次启动的时间（该策略在所填开始日期之后生效）；间隔时间表示任务两次启动的时间间隔，以小时为单位（只在当天有效，例：若开始时间为21:00，间隔4小时，则任务每日只执行一次）。")
+                                                        em.fa.fa-question-circle
+                        .bk-form-row(ng-show="autoTaskSummaryObj.triggerOption=='timed'")
+                            label.bk-form-row-name
+                                span.text-danger *
+                                | 开始时间：
+                            .bk-form-row-cell
+                                .bk-form-row-li.col-lg-12(style="float:left")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            p.form-control-static.input-group
+                                                input.form-control(name="triggerDate", readonly="", ng-required="true", type="text", min-date="minDate", datepicker-popup="yyyy/MM/dd", ng-model="autoTaskSummaryObj.triggerDate", is-open="opened", current-text="今天", close-text="关闭", clear-text="清除", placeholder="开始时间")
+                                                span.input-group-btn
+                                                    button.btn.btn-default(type="button", ng-click="open($event)")
+                                                        em.fa.fa-calendar
+                                            p.form-control-static
+                                                timepicker(name="triggerTime", ng-model="autoTaskSummaryObj.triggerTime")
+                                .help-block(ng-if="autoTaskForm.triggerDate.$valid && autoTaskForm.triggerTime.$valid && !isTriggerValid")
+                                    small.error.text-danger 开始时间不得小于当前系统时间
+                        .bk-form-row(ng-show="autoTaskSummaryObj.triggerOption=='timed'")
+                            label.bk-form-row-name
+                                span.text-danger *
+                                | 间隔时间：
+                            .bk-form-row-cell
+                                .bk-form-row-li.col-lg-12(style="float:left")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            p.form-control-static
+                                                ui-select(ng-model="autoTaskSummaryObj.spaceHour", theme="bootstrap", ng-disabled="disabled", reset-search-input="true")
+                                                    ui-select-match(placeholder="请选择间隔时间") {{$select.selected}}小时
+                                                    ui-select-choices(repeat="space in spaceList | filter: $select.search")
+                                                        span(ng-bind-html="space | highlight: $select.search")
+                        .bk-form-row(ng-show="curTestSuite.type=='ThreePart'")
+                            label.bk-form-row-name
+                                span.text-danger *
+                                | Shell：
+                            div(style="margin-left: 140px")
+                                .col-lg-12(style="float:left; padding: 0 0 9px; min-height: 0")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            p.form-control-static
+                                                ui-codemirror(ui-codemirror-opts="editorOpts", ng-model="autoTaskSummaryObj.runScript", ui-refresh="refreshCodemirror")
+                                                //textarea.form-control(spellcheck="false", style="resize: none;", type="text", required="", ng-model="autoTaskSummaryObj.runScript", placeholder="请输入运行脚本")
+                        .bk-form-row(ng-show="curTestSuite.type=='ThreePart'")
+                            label.bk-form-row-name
+                                span.text-danger *
+                                | 日志路径：
+                            .bk-form-row-cell
+                                .bk-form-row-li.col-lg-12(style="float:left")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            input.form-control(spellcheck="false", type="text", required="", name="autoTaskLogFile", ng-model="autoTaskSummaryObj.logFile", placeholder="请填写所生成日志的相对路径")
+                        .bk-form-row(display-type="dtpPro")
+                            label.bk-form-row-name
+                                span 关注人：
+                            .bk-form-row-cell
+                                .bk-form-row-li.col-lg-12(style="float:left")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            p.form-control-static
+                                                ui-select(ng-if="true", multiple="", ng-model="autoTaskSummaryObj.concernUserArr", theme="bootstrap", ng-disabled="disabled", reset-search-input="true")
+                                                    ui-select-match(placeholder="请选择关注人") {{$item.displayname}}
+                                                    ui-select-choices(repeat="user.id as user in userList | filter:$select.search") {{user.displayname}}
+                        .bk-form-row(display-type="dtpAuto")
+                            label.bk-form-row-name
+                                span 关注人：
+                            .bk-form-row-cell
+                                .bk-form-row-li.col-lg-12(style="float:left")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            p.form-control-static.input-group
+                                                input.form-control(title="{{autoTaskSummaryObj.concernUserArr.length ? autoTaskSummaryObj.concernUserArr.join(',') : ''}}", readonly="", type="text", placeholder="任务报告收件人", ng-value="autoTaskSummaryObj.concernUserArr.length ? (autoTaskSummaryObj.concernUserArr.length > 1 ? autoTaskSummaryObj.concernUserArr[0] + '...' : autoTaskSummaryObj.concernUserArr[0]) : ''")
+                                                span.input-group-btn
+                                                    button.btn.btn-default(title="管理收件人", type="button", ng-click="openReceiverModal()")
+                                                        em.fa.fa-plus
+                        .bk-form-row
+                            label.bk-form-row-name
+                                span 任务描述：
+                            .bk-form-row-cell
+                                .bk-form-row-li.col-lg-12(style="float:left")
+                                    .row
+                                        .col-lg-4(style="min-width: 200px")
+                                            p.form-control-static
+                                                textarea.form-control(maxlength="255", spellcheck="false", style="resize: none;", type="text", ng-model="autoTaskSummaryObj.description", placeholder="请输入任务描述")
+                                .bk-form-row-txt
+                                    span 255个字符以内
+        dl.bk-group(data-title="用例选择", data-disabled="false", ng-show="curTestSuite.type!='ThreePart'")
+            dt.bk-group-title 用例选择
+            dd.bk-group-detail
+                .bk-group
+                    .bk-form-row
+                        label.bk-form-row-name
+                            span 优先级过滤：
+                        .bk-form-row-cell
+                            .bk-form-row-li.col-lg-12(style="float:left")
+                                .row
+                                    .col-lg-4(style="min-width: 200px")
+                                        p.form-control-static
+                                            ui-select(ng-if="true", multiple="", ng-model="filterPriorities.selected", theme="bootstrap", ng-disabled="disabled", reset-search-input="true", ng-change="searchTree()")
+                                                ui-select-match(placeholder="优先级过滤") {{$item}}
+                                                ui-select-choices(repeat="priority in priorityArr | filter:$select.search") {{priority}}
+                    .bk-form-row
+                        label.bk-form-row-name
+                            span.text-danger *
+                            | 测试用例：
+                        .bk-form-row-cell
+                            .bk-form-row-li.col-lg-12(style="float:left")
+                                .row
+                                    .col-lg-6(style="min-width: 200px")
+                                        div#treeBody
+                                            .row(ng-if="my_data.length")
+                                                .col-sm-3.col-sm-push-1
+                                                    button.btn.btn-oval.btn-default(type="button", ng-click="my_tree.check_all()") 全部选中
+                                                .col-sm-3.col-sm-push-1
+                                                    button.btn.btn-oval.btn-default(type="button", ng-click="my_tree.uncheck_all()") 取消全选
+                                            div#caseArea
+                                                dtp-abn-tree(tree-data="my_data", tree-control="my_tree", checkbox-show="true", selected-branch="selectedBranches", on-select="my_tree_handler(branch)", update-tree="try_async_load(branch)", expand-level="1", icon-expand="fa fa-sort-up", icon-collapse="fa fa-sort-down")
+                                                .text-center(ng-if="!my_data.length")
+                                                    span(style="font-size: 20px; padding-top: 30px; padding-bottom: 30px;") 没有符合条件的数据
+        dl.bk-group(data-title="参数配置", data-disabled="false", ng-show="curTestSuite.type!='ThreePart'")
+            dt.bk-group-title 参数配置
+            dd.bk-group-detail
+                .bk-group
+                    .bk-form-row
+                        .bk-form-row-cell
+                            .bk-form-row-li.col-lg-12(style="float:left")
+                                .row
+                                    .col-sm-6
+                                        .row
+                                            .col-sm-3.col-sm-push-1
+                                                button.btn.btn-oval.btn-default(type="button", ng-click="exportConf()") 配置导出
+                                            .col-sm-3.col-sm-push-1
+                                                button.btn.btn-oval.btn-default(type="button", ng-click="importConf()") 配置导入
+                                    .col-sm-6
+                                    .col-lg-8(style="min-width: 200px")
+                                        table.table.table-dtp
+                                            thead
+                                                th(style="width: 20%") 配置名称
+                                                th(style="width: 20%") 配置描述
+                                                th(style="width: 55%") 配置取值
+                                                th(style="width: 5%")
+                                                    div(ng-click="isFolded = !isFolded", tooltip="{{isFolded ? '展开' : '折叠'}}")
+                                                        em.fa(ng-class="isFolded ? 'fa-plus' : 'fa-minus'")
+                                            tbody
+                                                tr(ng-repeat="kv in autoTaskSummaryObj.confKvList", ng-if="!isFolded")
+                                                    td
+                                                        span(tip-value="{{kv.key}}", max-len-hidden="30") {{kv.key}}
+                                                    td
+                                                        span(tip-value="{{kv.description ? kv.description : '--'}}", max-len-hidden="10") {{kv.description ? kv.description : "--"}}
+                                                    td
+                                                        input.form-control(type="text", ng-model="kv.value")
+                //.bk-group
+                    .bk-form-row
+                        .bk-form-row-li.col-lg-12(style="float:left")
+                            .row
+                                .col-lg-12(style="min-width: 200px")
+                                    .pull-right(ng-click="isFolded = !isFolded", tooltip="{{isFolded ? '展开' : '折叠'}}")
+                                        em.fa(ng-class="isFolded ? 'fa-plus' : 'fa-minus'")
+                                    .col-lg-11
+                                        form.form-validate.form-horizontal(novalidate="", ng-if="!isFolded")
+                                            .form-group(style="margin-bottom: 0", ng-repeat="kv in confKvList")
+                                                label.col-sm-4.control-label(style="padding-top: 20px; text-align: left")
+                                                    span {{kv.key}}：
+                                                .col-sm-8
+                                                    p.form-control-static
+                                                        input.form-control(spellcheck="false", type="text", ng-model="kv.value")
+        dl.bk-group
+            dt.bk-group-title.ng-binding 提交
+            dd.bk-group-detail
+                .bk-form-row
+                    .bk-form-row-cell
+                        button.btn.btn-lg.btn-dtblue(type="submit", ng-click="saveAutoTask()", ng-disabled="!validateAutoTask()") 保存
+                        button.btn.btn-lg.btn-default(type="button", ui-sref="auto.auto-task-list") 取消
+    //.col-sm-8
+        form.form-validate.form-horizontal(name="autoTaskForm", novalidate="")
+            .modal-header
+                .pull-right
+                    small(style="color:red;float:left;") *
+                    small(style="float:left;") 标记为必填项
+                h4.modal-title 基本信息配置
+            .modal-body
+                .form-group
+                    label.col-sm-3.control-label
+                        span(style="color:red") *
+                        span 任务名称：
+                    .col-sm-5
+                        p.form-control-static
+                            input.form-control(spellcheck="false", type="text", required="", name="autoTaskName", ng-model="autoTaskSummaryObj.name", placeholder="仅能包含字母、数字或中文，长度为3-35个字符", ng-pattern="/^[0-9a-zA-Z\\u4e00-\\u9fa5]{3,35}$/")
+                            span.text-danger(ng-show="validateInput('autoTaskName', 'required')") 请输入任务名称
+                            span.text-danger(ng-show="validateInput('autoTaskName', 'pattern')") 仅能包含字母、数字或中文，长度为3-35个字符
+                            span.text-danger(ng-show="isNameDuplicated") 任务名称已存在，请修改
+                .form-group
+                    label.col-sm-3.control-label
+                        span(style="color:red") *
+                        span 测试套：
+                    .col-sm-5
+                        p.form-control-static
+                            ui-select(ng-model="autoTaskSummaryObj.testSuiteId", ng-change="changeTestSuite($select.selected)", theme="bootstrap", ng-disabled="autoTaskId!=null", reset-search-input="true")
+                                ui-select-match(placeholder="请选择产品测试套") {{$select.selected.name}}
+                                ui-select-choices(repeat="testSuite.id as testSuite in testSuiteList | filter: $select.search")
+                                    span(ng-bind-html="testSuite.name | highlight: $select.search")
+                            span.text-danger(ng-show="validateTestSuite()") 请选择测试套
+                .form-group(ng-if="curTestSuite.type=='WEB'")
+                    label.col-sm-3.control-label
+                        span(style="color:red") *
+                        span 浏览器：
+                    .col-sm-5
+                        p.form-control-static
+                            ui-select(ng-model="autoTaskSummaryObj.browser", theme="bootstrap", ng-disabled="disabled", reset-search-input="true")
+                                ui-select-match(placeholder="Web页面测试套可选") {{$select.selected}}
+                                ui-select-choices(repeat="browser in browserList | filter: $select.search")
+                                    span(ng-bind-html="browser | highlight: $select.search")
+                            span.text-danger(ng-show="validateBrowser()") 请选择浏览器
+                .form-group
+                    label.col-sm-3.control-label
+                        span(style="color:red") *
+                        span 执行机：
+                    .col-sm-5
+                        p.form-control-static
+                            ui-select(ng-model="autoTaskSummaryObj.slaveId", theme="bootstrap", ng-disabled="disabled", reset-search-input="true")
+                                ui-select-match(placeholder="请选择执行机") {{$select.selected.name}}
+                                ui-select-choices(repeat="slave.id as slave in slaveList | filter: $select.search")
+                                    span(ng-bind-html="slave.name | highlight: $select.search")
+                            span.text-danger(ng-show="validateSlave()") 请选择执行机
+                .form-group
+                    label.col-sm-3.control-label
+                        span(style="color:red") *
+                        span 触发条件：
+                    .col-sm-5
+                        p.form-control-static(style="margin-left: 10px;")
+                            label.radio-inline.c-radio
+                                input(type="radio", value="annual", ng-model="autoTaskSummaryObj.triggerOption")
+                                span.fa.fa-circle
+                                |  手工
+                            label.radio-inline.c-radio
+                                input(type="radio", value="timed", ng-model="autoTaskSummaryObj.triggerOption")
+                                span.fa.fa-circle
+                                |  周期定时
+                                a(tooltip="周期定时策略：开始时间表示任务每日首次启动的时间（该策略在所填开始日期之后生效）；间隔时间表示任务两次启动的时间间隔，以小时为单位（只在当天有效，例：若开始时间为21:00，间隔4小时，则任务每日只执行一次）。")
+                                    em.fa.fa-question-circle
+                .form-group(ng-show="autoTaskSummaryObj.triggerOption=='timed'")
+                    label.col-sm-3.control-label
+                        span(style="color:red") *
+                        span 开始时间：
+                    .col-sm-5
+                        p.form-control-static.input-group
+                            input.form-control(readonly="", ng-required="true", type="text", min-date="minDate", datepicker-popup="yyyy/MM/dd", ng-model="autoTaskSummaryObj.triggerDate", is-open="opened", current-text="今天", close-text="关闭", clear-text="清除", placeholder="开始时间")
+                            span.input-group-btn
+                                button.btn.btn-default(type="button", ng-click="open($event)")
+                                    em.fa.fa-calendar
+                        p.form-control-static
+                            timepicker(ng-model="autoTaskSummaryObj.triggerTime")
+                .form-group(ng-if="autoTaskSummaryObj.triggerOption=='timed'")
+                    label.col-sm-3.control-label
+                        span(style="color:red") *
+                        span 间隔时间：
+                    .col-sm-5
+                        p.form-control-static
+                            ui-select(ng-model="autoTaskSummaryObj.spaceHour", theme="bootstrap", ng-disabled="disabled", reset-search-input="true")
+                                ui-select-match(placeholder="请选择间隔时间") {{$select.selected}}小时
+                                ui-select-choices(repeat="space in spaceList | filter: $select.search")
+                                    span(ng-bind-html="space | highlight: $select.search")
+                .form-group(display-type="dtpAuto")
+                    label.col-sm-3.control-label
+                        span 关注人：
+                    .col-sm-5
+                        p.form-control-static.input-group
+                            input.form-control(readonly="", type="text", placeholder="任务报告收件人")
+                            span.input-group-btn
+                                button.btn.btn-default(title="管理收件人", type="button", ng-click="openReceiverModal()")
+                                    em.fa.fa-plus
+                .form-group(display-type="dtpPro")
+                    label.col-sm-3.control-label
+                        span 关注人：
+                    .col-sm-5
+                        p.form-control-static
+                            ui-select(ng-if="true", multiple="", ng-model="autoTaskSummaryObj.concernUserArr", theme="bootstrap", ng-disabled="disabled", reset-search-input="true")
+                                ui-select-match(placeholder="请选择关注人") {{$item.displayname}}
+                                ui-select-choices(repeat="user.id as user in userList | filter:$select.search") {{user.displayname}}
+                .form-group
+                    label.col-sm-3.control-label
+                        span 任务描述：
+                    .col-sm-5
+                        p.form-control-static
+                            textarea.form-control(spellcheck="false", style="resize: none;", type="text", ng-model="autoTaskSummaryObj.description", placeholder="请输入任务描述")
+        form.form-validate.form-horizontal(novalidate="")
+            .modal-header
+                h4.modal-title 用例选择
+            .modal-body#treeBody
+                .form-group
+                    label.col-sm-3.control-label
+                        span 优先级过滤：
+                    .col-sm-5
+                        p.form-control-static
+                            ui-select(ng-if="true", multiple="", ng-model="filterPriorities.selected", theme="bootstrap", ng-disabled="disabled", reset-search-input="true", ng-change="searchTree()")
+                                ui-select-match(placeholder="优先级过滤") {{$item}}
+                                ui-select-choices(repeat="priority in priorityArr | filter:$select.search") {{priority}}
+                .form-group
+                    label.col-sm-3.control-label
+                        span 用例：
+                    .col-sm-5
+                        div
+                            .row(ng-if="my_data.length")
+                                .col-sm-3.col-sm-push-3
+                                    button.btn.btn-oval.btn-default(type="button",ng-click="my_tree.check_all()") 全部选中
+                                .col-sm-3.col-sm-push-3
+                                    button.btn.btn-oval.btn-default(type="button",ng-click="my_tree.uncheck_all()") 取消全选
+                            div#caseArea
+                                dtp-abn-tree(tree-data="my_data", tree-control="my_tree", checkbox-show="true", selected-branch="selectedBranches", on-select="my_tree_handler(branch)", update-tree="try_async_load(branch)", expand-level="1", icon-expand="fa fa-sort-up", icon-collapse="fa fa-sort-down")
+                                .text-center(ng-if="!my_data.length")
+                                    span(style="font-size: 20px; padding-top: 30px; padding-bottom: 30px;") 没有符合条件的数据
+        form.form-validate.form-horizontal(novalidate="")
+            .modal-header
+                .pull-right(ng-click="isFolded = !isFolded", tooltip="{{isFolded ? '展开' : '折叠'}}")
+                    em.fa(ng-class="isFolded ? 'fa-plus' : 'fa-minus'")
+                    //hr(style="width: 10px; border:1px solid #999;")
+                h4.modal-title 参数配置
+            .modal-body(ng-show="!isFolded")
+                .form-group(style="margin-bottom: 0", ng-repeat="kv in confKvList")
+                    label.col-sm-4.control-label
+                        span {{kv.key}}：
+                    .col-sm-6
+                        p.form-control-static
+                            input.form-control(spellcheck="false", type="text", ng-model="kv.value")
+        .pull-right(style="margin-top: 35px")
+            button.button.button-primary.mb(ng-click="saveAutoTask()")
+                | 保存
+            button.button.button-default.mb(ui-sref="auto.auto-task-list")
+                | 取消
+
+script(type="text/ng-template", id="/TestEnvModal.html")
+    form#templateForm.form-validate.form-horizontal(name="TestEnvForm", novalidate="")
+        .modal-header
+            button.close(type="button", data-dismiss="modal", aria-hidden="true", ng-click="cancel()") ×
+            h4.modal-title {{isEditTask ? "编辑" : "新建"}}任务>参数配置
+        .modal-body
+            span.text-warning(style="font-size: 15px;", ng-if="!confKvList.length") 无参数配置项
+            .table-responsive(ng-if="confKvList.length > 0")
+                table.table.table-striped.table-bordered.table-hover
+                    tbody
+                        tr(ng-repeat="kv in confKvList")
+                            td
+                                .col-sm-4
+                                    input.form-control(ng-disabled="true", type="text", ng-model="kv.key", placeholder="键名")
+                                .col-sm-8
+                                    input.form-control(type="text", ng-model="kv.value", placeholder="值", spellcheck="false")
+        .modal-footer
+            button.btn.btn-primary(type="button", ng-click="submitForm()") 确定
+            button.btn.btn-default(type="button", ng-click="cancel()") 取消
+script(type="text/ng-template", id="/ReceiverModal.html")
+    form#receiverForm.form-validate.form-horizontal(name="ReceiverForm", novalidate="")
+        .modal-header
+            button.close(type="button", data-dismiss="modal", aria-hidden="true", ng-click="cancel()") ×
+            h4.modal-title 任务报告收件人设置
+        .modal-body
+            .form-group
+                label.col-sm-2.control-label
+                    span 邮箱地址
+                .col-sm-8
+                    div.col-sm-12(ng-repeat="receiver in receiverList track by $index", style="margin-bottom: 8px")
+                        .col-sm-10
+                            input.form-control(spellcheck="false", required="", type="email", ng-model="receiver.mailAddress", placeholder="请输入收件人邮箱")
+                        .col-sm-1
+                            span.fa.fa-minus-square.btn.btn-link(ng-click="delEmailAddress($index)", ng-if="receiverList.length > 1") 删除
+                span.fa.fa-plus-square.btn.btn-link(ng-click="addEmailAddress()") 添加
+        .modal-footer
+            button.btn.btn-primary(type="button", ng-click="submitForm()", ng-disabled="!(ReceiverForm.$valid && receiverList.length > 0)") 确定
+            button.btn.btn-default(type="button", ng-click="cancel()") 取消
+script(type="text/ng-template", id="/ConfigImportModal.html")
+    form.form-validate.form-horizontal(novalidate="")
+        .modal-header
+            button.close(type="button", data-dismiss="modal", aria-hidden="true", ng-click="cancel()") ×
+            h4.modal-title 导入配置文件
+        .modal-body
+            input.form-control(filestyle="", type='file', data-button-text="浏览", data-class-button="btn btn-default", data-classinput="form-control inline", nv-file-select="", uploader="uploader")
+            div(ng-if="uploader.queue.length")
+                table.table(ng-if="uploader.queue.length")
+                    thead
+                        tr
+                            th(width="50%") Name
+                            th(ng-show="uploader.isHTML5") Size
+                            th Actions
+                    tbody
+                        tr(ng-repeat="item in uploader.queue")
+                            td
+                                strong {{ item.file.name }}
+                            td(ng-show="uploader.isHTML5", nowrap="") {{ item.file.size/1024/1024 | number:2 }} MB
+                            td(nowrap="")
+                                button.btn.btn-danger.btn-xs(type="button", ng-click="remove()")
+                                    span.icon-trash.mr
+                                    |  Remove
+        .modal-footer
+            button.btn.btn-primary(type="button", ng-click="submitForm()") 确定
+            button.btn.btn-default(type="button", ng-click="cancel()") 取消

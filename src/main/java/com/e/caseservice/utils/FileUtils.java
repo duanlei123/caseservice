@@ -2,9 +2,16 @@ package com.e.caseservice.utils;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.FileCopyUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.zip.GZIPInputStream;
 
 public class FileUtils {
@@ -104,5 +111,53 @@ public class FileUtils {
         }
         return true;
     }
+
+
+    public static HttpServletResponse download(HttpServletRequest request, HttpServletResponse response, String fileName, String saveName) {
+        return download(request, response, fileName, saveName, false);
+    }
+
+    public static HttpServletResponse download(HttpServletRequest request, HttpServletResponse response, String fileName, String saveName, boolean autoContentType) {
+
+        String contentType = "application/octet-stream";
+        if (autoContentType) {
+            try {
+                contentType = Files.probeContentType(Paths.get(fileName));
+            } catch (IOException e) {
+                LOGGER.warn("cannot judge content type", e);
+                contentType = "application/octet-stream";
+            }
+        }
+        BufferedInputStream bis = null;
+
+        //得到下载文件的长度，单位为字节
+        long fileLength = new File(fileName).length();
+
+        //设置response的属性
+        response.setContentType(contentType);
+        if (StringUtils.isEmpty(saveName)) {
+            saveName = new File(fileName).getName();
+        }
+        try {
+            response.setHeader("Content-disposition", "attachment; filename=" + new String(saveName.getBytes("utf-8"), "ISO8859-1"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        response.setHeader("Content-Length", String.valueOf(fileLength));
+
+        //设置输入输出流
+        try {
+            bis = new BufferedInputStream(new FileInputStream(fileName));
+            //拷贝流
+            FileCopyUtils.copy(bis, response.getOutputStream());
+        } catch (FileNotFoundException e) {
+            LOGGER.error("下载文件不存在", e);
+
+        } catch (IOException e) {
+            LOGGER.error("下载文件拷贝失败", e);
+        }
+        return response;
+    }
+
 
 }

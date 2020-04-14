@@ -29,7 +29,7 @@ public class ControllerAspect {
 
     ThreadLocal<Long> startTime = new ThreadLocal<Long>();
 
-    @Pointcut("execution(public * com.e.caseservice.controller.*.*(..))")
+    @Pointcut("execution(public * com.e.caseservice.controller.*.*.*(..))")
     public void webLog() {
     }
 
@@ -57,7 +57,7 @@ public class ControllerAspect {
     @AfterReturning(returning = "ret", pointcut = "webLog()")
     public void doAfterReturning(Object ret) throws Throwable {
         // 处理完请求，返回内容
-        logger.info("RESPONSE: {} " , ret);
+        logger.info("RESPONSE: {} " , ret.toString());
         logger.info("SPEND TIME: {} ms", System.currentTimeMillis() - startTime.get());
     }
 }

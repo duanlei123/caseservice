@@ -1,0 +1,261 @@
+<h3>{{autoTaskName ? autoTaskName : "#####"}}>执行列表
+   <a>
+      <button type="button" ui-sref="auto.auto-task-list" class="btn btn-pill-left btn-default">
+         <em class="fa fa-mail-reply">返回</em>
+      </button>
+   </a>
+</h3>
+<div class="container-fluid">
+   <div ng-if="!autoTaskExecList.length" class="text-center">
+      <span style="font-size: 20px; padding-top: 30px; padding-bottom: 30px;">任务从未执行</span>
+   </div>
+   <div ng-if="autoTaskExecList.length &gt; 0" class="row">
+      <div class="col-md-2">
+         <div class="pr clearfix mb well">
+            <!--input.form-control(placeholder="按年/月/日过滤，Enter", style="margin-bottom: 10px")-->
+            <div class="mb-boxes">
+               <ul class="nav nav-pills nav-stacked">
+                  <li ui-sref-active="active" ng-repeat="autoTaskExec in autoTaskExecList" ng-click="getAutoTaskExecInfo(autoTaskId, autoTaskExec)" ng-style="{'background-color': autoTaskExec.id==currentExec.id ? '#c0d0d3' : ''}">
+                     <a>
+                        <!--span.label.pull-right(ng-class="autoTaskExec.jobResult=='SUCCESS' ? 'label-green' : (autoTaskExec.jobResult=='FAILURE' ? 'label-danger' : (autoTaskExec.jobResult=='ABORTED' ? 'label-pink' : 'label-warning'))") {{autoTaskExec.jobResult=='SUCCESS' ? 'S' : (autoTaskExec.jobResult=='FAILURE' ? 'F' : (autoTaskExec.jobResult=='ABORTED' ? 'A' : 'R'))}}-->
+                        <span>{{autoTaskExec.jobStartTime | date: "yyyy/MM/dd HH:mm"}}</span>
+                     </a>
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <div class="col-md-10">
+         <div class="pr clearfix mb well">
+            <div class="pull-right">
+               <span ng-if="autoTestSuite.type=='ThreePart' &amp;&amp; currentExec.jobResult &amp;&amp; autoTaskLog" class="btn-group">
+                  <a ng-href="../autotask/downloadAutoTaskLogFile?autoTaskId={{autoTaskId}}&amp;autoTaskExecId={{currentExec.id}}">
+                     <button class="btn btn-info btn-lg">导出</button>
+                  </a>
+               </span>
+               <button ng-if="autoTestSuite.type!='ThreePart'" ui-sref="auto.auto-task-report({tid: autoTaskId, eid: currentExec.id})" ng-disabled="currentExec.jobResult==null" class="btn btn-info btn-lg">查看报告</button>
+               <button ng-click="refreshExecInfo(autoTaskId, currentExec)" class="btn btn-info btn-lg">
+                  <em class="fa fa-refresh"></em>刷新</button>
+               <button ng-click="openDeleteModal(currentExec.id)" ng-disabled="currentExec.jobResult==null" class="btn btn-danger btn-lg">删除记录</button>
+            </div>
+            <tabset ng-show="autoTestSuite.type=='ThreePart'">
+               <tab heading="报告日志">
+                  <!--a(style="padding: 20px", ng-if="autoTaskLog", ng-href="../autotask/downloadAutoTaskLogFile?autoTaskId={{autoTaskId}}&autoTaskExecId={{currentExec.id}}") 导出-->
+                  <textarea style="height: 600px;" ng-model="autoTaskLog" readonly="" block-ui="reportBlockUI" ng-if="currentExec.jobResult!=null &amp;&amp; autoTaskLog" class="form-control"></textarea>
+                  <p ng-if="currentExec.jobResult!=null &amp;&amp; !autoTaskLog" style="padding: 20px" class="text-danger">获取日志报告异常</p>
+                  <p ng-if="currentExec.jobResult==null" style="padding: 20px" class="text-warning">日志未生成，请稍后……</p>
+               </tab>
+            </tabset>
+            <tabset ng-show="autoTestSuite.type!='ThreePart'">
+               <tab heading="执行概览" select="redrawGraph()">
+                  <div style="margin-top: 10px" block-ui="progressBlockUI">
+                     <div class="modal-header">
+                        <div class="row">
+                           <div class="col-sm-5">
+                              <h5 style="font-weight: bold" class="modal-title">执行状态
+                                 <label style="margin-left: 35px" ng-class="currentExec.jobResult=='SUCCESS' ? 'label-success' : (currentExec.jobResult=='FAILURE' ? 'label-danger' : (currentExec.jobResult=='ABORTED' ? 'label-warning' : 'label-dtgreen'))"
+                                 class="label">{{currentExec.jobResult == null ? "RUNNING" : currentExec.jobResult}}</label>
+                              </h5>
+                           </div>
+                           <div ng-if="currentExec.formatDuration" class="col-sm-5">
+                              <h5 style="font-weight: bold" class="modal-title">执行用时
+                                 <span style="margin-left: 35px">{{currentExec.formatDuration}}</span>
+                              </h5>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="modal-header">
+                        <div class="row">
+                           <div class="col-sm-5">
+                              <h5 style="font-weight: bold" class="modal-title">总体进度
+                                 <span style="margin-left: 35px">{{autoTaskProgress.testCount}}/{{autoTaskProgress.totalCount}}（已测试/总用例）</span>
+                              </h5>
+                           </div>
+                           <div ng-if="currentExec.jobResult" class="col-sm-5">
+                              <h5 style="font-weight: bold" class="modal-title">通过比率
+                                 <span style="margin-left: 35px">{{autoTaskProgress.passRate}}</span>
+                              </h5>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="modal-body">
+                        <div class="row">
+                           <div class="col-sm-4 col-sm-push-1">
+                              <div class="panel panel-transparent">
+                                 <div class="panel-body">
+                                    <canvas id="progressGraph" tooltip="{{autoTaskProgress.percentage}}" classyloader="" data-trigger-in-view="true" data-percentage="" data-speed="0" data-font-size="35px" data-line-color="#0094cb" data-remaining-line-color="rgba(200,200,200,0.4)"
+                                    data-line-width="10"></canvas>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-sm-4 col-sm-push-1">
+                              <div class="panel panel-transparent">
+                                 <div class="panel-body">
+                                    <div id="statisticGraph" style="height: 200px"></div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="modal-header">
+                        <h5 style="font-weight: bold" class="modal-title">模块进度</h5>
+                     </div>
+                     <div class="modal-body">
+                        <table class="table table-dtp">
+                           <thead>
+                              <th>模块</th>
+                              <th>Pass</th>
+                              <th>Fail</th>
+                              <th>Skip</th>
+                              <th>Not Test</th>
+                              <th>耗时（约）</th>
+                              <th>通过率</th>
+                              <th>进度</th>
+                           </thead>
+                           <tbody>
+                              <tr ng-repeat="moduleProgress in autoTaskProgress.moduleProgressList">
+                                 <td><a ng-click="filterByModule(moduleProgress.packageName)" tooltip="查看模块详情">{{moduleProgress.lastPackageName}}</a>
+                                 </td>
+                                 <td>
+                                    <a ng-click="filterByModule(moduleProgress.packageName, 'Pass')">
+                                       <span style="color: #27c24c">{{moduleProgress.passCount}}</span>
+                                    </a>
+                                 </td>
+                                 <td>
+                                    <a ng-click="filterByModule(moduleProgress.packageName, 'Fail')">
+                                       <span style="color: #f05050">{{moduleProgress.failCount}}</span>
+                                    </a>
+                                 </td>
+                                 <td>
+                                    <a ng-click="filterByModule(moduleProgress.packageName, 'Skip')">
+                                       <span style="color: #ff902b">{{moduleProgress.skipCount}}</span>
+                                    </a>
+                                 </td>
+                                 <td>
+                                    <a ng-click="filterByModule(moduleProgress.packageName, 'Not Test')">
+                                       <span>{{moduleProgress.notTestCount}}</span>
+                                    </a>
+                                 </td>
+                                 <td>
+                                    <span>{{moduleProgress.formatDuration}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{moduleProgress.passRate}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{moduleProgress.percentage}}</span>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </tab>
+               <tab heading="用例结果" active="caseResultTab.active">
+                  <div class="pr clearfix mb well">
+                     <div class="col-sm-3">
+                        <input type="text" placeholder="请输入用例或函数名称" ng-model="searchOption.caseName" class="form-control" />
+                     </div>
+                     <div class="col-sm-1">
+                        <button ng-click="getAutoTaskCaseResult(currentExec.id)" class="btn btn-info">搜索</button>
+                     </div>
+                     <div class="col-sm-4">
+                        <ui-select multiple="" ng-model="searchOption.resultList" ng-change="getAutoTaskCaseResult(currentExec.id)" theme="bootstrap" ng-disabled="disabled" reset-search-input="true">
+                           <ui-select-match placeholder="按执行结果过滤">{{$item}}</ui-select-match>
+                           <ui-select-choices repeat="result in results | filter: $select.search">{{result}}</ui-select-choices>
+                        </ui-select>
+                        <!--.input-groupspan.input-group-btn
+    button.btn.btn-default(type="button", title="清空结果", ng-click="clearResults()")
+        em.icon-close-->
+                     </div>
+                     <div class="col-sm-3">
+                        <div class="input-group">
+                           <ui-select ng-model="searchOption.packageName" ng-change="getAutoTaskCaseResult(currentExec.id)" theme="bootstrap" ng-disabled="disabled" reset-search-input="true">
+                              <ui-select-match placeholder="按模块过滤">{{$select.selected.lastPackageName}}</ui-select-match>
+                              <ui-select-choices repeat="module.packageName as module in caseModuleList | filter: $select.search">
+                                 <span ng-bind-html="module.lastPackageName | highlight: $select.search"></span>
+                              </ui-select-choices>
+                           </ui-select>
+                           <span style="height: 37px" class="input-group-btn">
+                              <button type="button" title="清空模块" ng-click="clearModule()" class="btn btn-default">
+                                 <em class="icon-close"></em>
+                              </button>
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+                  <table ng-table="tableParams" block-ui="resultBlockUI" template-pagination="app/views/ngtable-foot.html" class="table table-dtp">
+                     <tbody>
+                        <tr ng-repeat="case in $data">
+                           <td data-title="'用例名称'"><a tip-value="{{case.caseDesc}}" max-len-hidden="15" href="{{case.gitUrl}}" target="_blank">{{case.caseDesc}}</a>
+                           </td>
+                           <td data-title="'函数名称'">
+                              <span tip-value="{{case.caseName}}" max-len-hidden="15">{{case.caseName}}</span>
+                           </td>
+                           <td data-title="'模块'" sortable="'lastPackageName'">
+                              <span>{{case.lastPackageName}}</span>
+                           </td>
+                           <td data-title="'测试接口'">
+                              <span tip-value="{{case.simpleClassName}}" max-len-hidden="15">{{case.simpleClassName}}</span>
+                           </td>
+                           <td data-title="'用例数据'">
+                              <span tip-value="{{case.data}}" max-len-hidden="15">{{case.data}}</span>
+                           </td>
+                           <td data-title="'执行结果'">
+                              <span ng-style="{'color': showColor(case.result)}">{{ case.result==null ? 'Not Test' : case.result }}</span>
+                           </td>
+                           <td data-title="'执行时间'" sortable="'totalDuration'">
+                              <span>{{case.formatTotalDuration}}</span>
+                           </td>
+                           <td data-title="'日志'"><a ui-sref="auto.auto-task-caselog({tid: autoTaskId, eid: currentExec.id, uuid: case.uuid})" target="_blank">详情</a>
+                           </td>
+                        </tr>
+                        <tr ng-if="!$data.length" class="table-nodata-tr">
+                           <td colspan="8">
+                              <div class="text-center">
+                                 <span class="table-nodata-content">没有符合条件的数据</span>
+                              </div>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </tab>
+               <tab heading="执行配置">
+                  <div style="margin-top: 10px">
+                     <div class="modal-header">
+                        <h5 style="font-weight: bold;" class="modal-title">执行机
+                           <label style="margin-left: 35px; color: #000" class="label b active fade in smal">{{autoTaskSummaryObj.slaveName}}</label>
+                        </h5>
+                     </div>
+                     <div class="modal-header">
+                        <h5 style="font-weight: bold;" class="modal-title">参数配置</h5>
+                     </div>
+                     <div class="modal-body">
+                        <div class="form-horizontal">
+                           <div style="margin-left:1em;margin-right:5%" class="table-responsive">
+                              <table class="table table-bordered">
+                                 <tbody>
+                                    <tr ng-repeat="kv in autoTaskSummaryObj.confKvList">
+                                       <td>
+                                          <span class="text-bold">{{kv.key}}</span>
+                                       </td>
+                                       <td>
+                                          <span>{{kv.value}}</span>
+                                       </td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </tab>
+               <!--tab(heading="控制台输出")div(ui-scroll-viewport="", style="height: 675px; overflow-y: auto; margin-left: 0em; line-height:normal; font-size: 15px", ng-bind-html="autoTaskExecConsole")-->
+            </tabset>
+         </div>
+      </div>
+   </div>
+</div>
+<script type="text/ng-template" id="confirmDeleteDialog">
+   <ngdialog-message><div class="modal-header"><h4>确认删除本次执行记录</h4></div><div class="modal-body"><span class="text-danger">即将删除本次任务执行产生的所有数据</span></div><div class="modal-footer"><button type="button" ng-click="deleteAutoTaskExec(ngDialogData.autoTaskExecId)" class="btn btn-danger mr">确定</button><button type="button" ng-click="closeThisDialog()" class="btn btn-default">取消</button></div></ngdialog-message>
+</script>

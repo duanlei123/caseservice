@@ -1,5 +1,7 @@
 package com.e.caseservice.common;
 
+import java.io.File;
+
 public class Constants {
 
     public static final String CASE_ANNOTATION_NAME = "Test";
@@ -35,4 +37,11 @@ public class Constants {
     public static final String TEST_SUITE_DEFAULT_VERSION = "1.0.0";
 
     public static final String CONF_DESCRIPTION_SUFFIX = ".description";
+
+
+
+    //上传/下载文件夹名称
+    public static final String UPLOADDIR = "upload" + File.separator;
+    public static final String DOWNLOADDIR = "download" + File.separator;
+    final static public String File_Repository = "file-repository";
 }

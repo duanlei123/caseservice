@@ -1,0 +1,80 @@
+/* ========================================================================
+   Component: form-tags.less
+ ========================================================================== */
+ 
+ // Define tag input with the same
+ // style like standard from controls
+ body {
+
+    .bootstrap-tagsinput {
+    box-shadow: 0 0 0 #000 !important;
+    display: block;
+    width: 100%;
+    height: @input-height-base; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
+    padding: 6px 16px;
+    font-size: @font-size-base;
+    line-height: @line-height-base;
+    color: @input-color;
+    background-color: @input-bg;
+    background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+    border: 1px solid @input-border;
+    //border-radius: @input-border-radius; // Note: This has no effect on <select>s in some browsers, due to the limited stylability of <select>s in CSS.
+    //border-bottom-left-radius: 0px;border-top-left-radius: 0px;
+    border-radius:0px;
+    .box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
+    .transition(~"border-color ease-in-out .15s, box-shadow ease-in-out .15s");
+
+    // Customize the `:focus` state to imitate native WebKit styles.
+    .form-control-focus();
+
+    // Placeholder
+    .placeholder();
+
+    // Disabled and read-only inputs
+    //
+    // HTML5 says that controls under a fieldset > legend:first-child won't be
+    // disabled if the fieldset is disabled. Due to implementation difficulty, we
+    // don't honor that edge case; we style them as disabled anyway.
+    &[disabled],
+    &[readonly],
+    fieldset[disabled] & {
+      background-color: @input-bg-disabled;
+      opacity: 1; // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655
+    }
+
+    &[disabled],
+    fieldset[disabled] & {
+      cursor: @cursor-disabled;
+    }
+
+    // Reset height for `textarea`s
+    textarea& {
+      height: auto;
+    }
+    // Allows to auto expand height
+    height: auto;
+    min-height: @input-height-base;
+    margin-bottom: 0;
+    }
+    .bootstrap-tagsinput:focus {
+     border-color: #66afe9;
+     outline: 0;
+     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+     box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    }
+    .bootstrap-tagsinput::-moz-placeholder {
+     color: #b7bac9;
+     opacity: 1;
+    }
+    .bootstrap-tagsinput:-ms-input-placeholder {
+     color: #b7bac9;
+    }
+    .bootstrap-tagsinput::-webkit-input-placeholder {
+     color: #b7bac9;
+    }
+
+    .bootstrap-tagsinput .tag {
+      color: #fff;
+    }
+}
+

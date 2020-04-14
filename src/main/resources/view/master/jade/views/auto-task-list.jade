@@ -1,0 +1,185 @@
+h3 任务列表
+
+.container-fluid#container(ng-controller="AutoTaskListController")
+    .search-dtp-row
+        .col-sm-2.col-dtp
+            input.form-control(type="text", placeholder="请输入任务名称", ng-model="searchOption.autoTaskName")
+        .col-sm-1.col-dtp
+            button.btn.btn-info(type="button", ng-click="getAutoTaskList()") 搜索
+        .col-sm-1.col-dtp(display-type="dtpPro")
+            p.input-group
+                label.checkbox.c-checkbox
+                    input(type="checkbox", ng-model="searchOption.isMyTask", ng-click="getAutoTaskList()")
+                    span.fa.fa-check
+                    |  我的任务
+        .col-sm-1.col-dtp(display-type="dtpPro")
+            p.input-group
+                label.checkbox.c-checkbox
+                    input(type="checkbox", ng-model="searchOption.isMyConcern", ng-click="getAutoTaskList()")
+                    span.fa.fa-check
+                    |  我的关注
+        .pull-right.col-dtp
+            button.btn.btn-dtgreen.mb(type="button", ui-sref="auto.create-auto-task") 创建任务
+            button.btn.btn-info.mb(ng-click="getAutoTaskList()")
+                em.fa.fa-refresh
+                | 刷新
+    table.table.table-dtp(ng-table="tableParams", block-ui="myBlockUI", template-pagination="app/views/ngtable-foot.html")
+        tbody
+            thead
+                th(display-type="dtpPro", style="width: 5%")
+                th 名称
+                th 产品测试套
+                th 启动方式
+                th 描述
+                th 创建人/时间
+                th 最新状态
+                th(style="width: 20%") 最新进度
+                th 操作
+            tr(ng-repeat="autoTask in $data")
+                td(display-type="dtpPro")
+                    .text-center(tooltip="{{autoTask.isMyConcern ? '取消关注' : '关注'}}")
+                        em.fa.fa-lg(ng-class="autoTask.isMyConcern ? 'fa-star text-warning' : 'fa-star-o text-muted'", ng-click="autoTask.isMyConcern ? removeMyConcern(autoTask) : setMyConcern(autoTask)")
+                td
+                    a(ui-sref="auto.auto-task-exec({tid: autoTask.id})")
+                        span(tip-value="{{autoTask.name}}", max-len-hidden="20") {{autoTask.name}}
+                td
+                    span(tip-value="{{autoTask.testSuiteName}}", max-len-hidden="20") {{autoTask.testSuiteName}}
+                td
+                    a(style="padding: 20px; color: #8EC95B", ng-click="", ng-if="autoTask.triggerOption=='timed'", tooltip="每日{{autoTask.triggerTime | date: 'HH:mm'}}启动，周期{{autoTask.spaceHour}}小时")
+                        em.fa.fa-clock-o.fa-lg
+                    a(style="padding: 20px; color: #8EC95B", ng-if="autoTask.triggerOption!='timed'")
+                        em.fa.fa-user.fa-lg
+                td
+                    span(tip-value="{{autoTask.description ? autoTask.description : '--'}}", max-len-hidden="25") {{autoTask.description ? autoTask.description : "--"}}
+                td {{autoTask.creatorName ? autoTask.creatorName : "未知"}}：{{autoTask.createTime | date:"yyyy-MM-dd HH:mm"}}
+                td
+                    span
+                        label.label(ng-class="showColorByStatus(autoTask.status)", style="width: 84px; display: inline-block") {{autoTask.status}}
+                td
+                    progressbar.inline.progress-striped.active.progress-striped.btn.disabled.fade.bl.br.in.bg-gray(max="100", value="autoTask.progress.percent", style="width: 80%; padding: 0; border-radius: .25em")
+                        span.text-alpha-inverse.text-bold.text-center &nbsp;&nbsp; {{autoTask.progress.percentage}} [ {{autoTask.progress.testCount}} / {{autoTask.progress.totalCount}} ]
+                td
+                    .btn-group(dropdown="dropdown", style="vertical-align: top")
+                        a.dropdown-toggle(href="", dropdown-toggle="") 管理
+                        ul.dropdown-menu.animated.fadeInDown(role="menu")
+                            li(ng-if="autoTask.triggerOption!='timed' && autoTask.status!='RUNNING'")
+                                a(ng-click="openRunModal(autoTask)") 启动
+                            li(ng-if="autoTask.status=='RUNNING'")
+                                a(ng-click="openStopModal(autoTask)") 停止
+                            li(ui-sref-active="active", ng-if="autoTask.status!='RUNNING'")
+                                a(ui-sref="auto.modify-auto-task({tid: autoTask.id})") 编辑
+                            li(ng-if="autoTask.status!='RUNNING'")
+                                a(ng-click="openDeleteModal(autoTask)") 删除
+            tr.table-nodata-tr(ng-if="!$data.length")
+                td(colspan="9")
+                    .text-center
+                        span.table-nodata-content 没有符合条件的数据
+//.container-fluid#container(ng-controller="AutoTaskListController")
+    style(type="text/css").
+        .overflow-hidden {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    .clearfix.mb.well
+        .col-sm-2
+            input.form-control(placeholder="请输入任务名称", ng-model="searchOption.autoTaskName")
+        .col-sm-1
+            button.btn.btn-info(type="button", ng-click="getAutoTaskList()") 搜索
+        .col-sm-1
+            p.input-group
+                label.checkbox.c-checkbox
+                    input(type="checkbox", ng-model="searchOption.isMyTask", ng-click="getAutoTaskList()")
+                    span.fa.fa-check
+                    |  我的任务
+        .col-sm-1
+            p.input-group
+                label.checkbox.c-checkbox
+                    input(type="checkbox", ng-model="searchOption.isMyConcern", ng-click="getAutoTaskList()")
+                    span.fa.fa-check
+                    |  我的关注
+        .pull-right
+            button.btn.btn-info.mb(ng-click="getAutoTaskList()")
+                em.fa.fa-refresh
+                | 刷新
+            button.btn.btn-info.mb(type="button", ui-sref="auto.create-auto-task") 创建任务
+    .clearfix.mb.well
+        table.table.table-striped.table-bordered.table-hover(ng-table="tableParams")
+            thead
+                tr
+                    th
+                    th 任务信息
+                    th(style="width: 10%;") 最新状态
+                    th(style="width: 10%;") 最新进度
+                    th(style="width: 10%;") 操作
+            tbody
+                tr
+                    td(ng-if="!$data.length")
+                    td
+                        .text-center(ng-if="!$data.length")
+                            span(style="font-size: 20px; padding-top: 30px; padding-bottom: 30px;") 没有符合条件的数据
+                tr(ng-repeat="autoTask in $data", style="border-collapse:separate; border-spacing:5px;")
+                    td
+                        .text-center(tooltip="{{autoTask.isMyConcern ? '取消关注' : '关注'}}")
+                            em.fa.fa-lg(ng-class="autoTask.isMyConcern ? 'fa-star text-warning' : 'fa-star-o text-muted'", ng-click="autoTask.isMyConcern ? removeMyConcern(autoTask) : setMyConcern(autoTask)")
+                    td
+                        .row
+                            .col-sm-4
+                                a(ui-sref="auto.auto-task-exec({tid: autoTask.id})")
+                                    span(title="任务名称")
+                                        h4.media-heading.text-primary.overflow-hidden(tooltip="{{autoTask.name}}") {{autoTask.name}}
+                            .col-sm-3
+                                span(title="产品测试套")
+                                    label.label.b.active.fade.in.small(style="color: #999") {{autoTask.testSuiteName | characters:15 :true}}
+                            .col-sm-2
+                                span
+                                    label.label.b.active.fade.in.small(style="color: #999", title="任务类型") {{autoTask.triggerOption=='timed' ? "周期启动" : "手工启动"}}
+                                    a(ng-click="", ng-if="autoTask.triggerOption=='timed'", tooltip="每日{{autoTask.triggerTime | date: 'HH:mm'}}启动，周期{{autoTask.spaceHour}}小时")
+                                        em.fa.fa-clock-o
+                                    a(ng-if="autoTask.triggerOption!='timed'")
+                                        em.fa.fa-user
+                            //.col-sm-2
+                                span(title="任务描述", tooltip="{{autoTask.description}}")
+                                    label.label.b.active.fade.in.small(style="color: #999") {{autoTask.description == "" ? "-----" : autoTask.description | characters:15 :true}}
+                            .col-sm-3
+                                span(title="创建人/时间")
+                                    label.label.b.active.fade.in.small(style="color: #999") {{autoTask.creatorName}}：{{autoTask.createTime | date:"yyyy-MM-dd HH:mm"}}
+                    td.text-center
+                        span
+                            label.label.b.active.fade.in.small(ng-style="{'color': showColorByStatus(autoTask.status)}") {{autoTask.status}}
+                    td.text-center
+                        progressbar.inline.progress-striped.active.progress-striped.btn.disabled.fade.bl.br.in.bg-gray(max="100", value="autoTask.progress.percent",style="width:100%;padding:0;")
+                            span.text-alpha-inverse.text-bold.text-center &nbsp;&nbsp; {{autoTask.progress.percentage}} [ {{autoTask.progress.testCount}} / {{autoTask.progress.totalCount}} ]
+                    td.text-center
+                        .btn-group(dropdown="dropdown", style="vertical-align: top")
+                            a.dropdown-toggle(href="", dropdown-toggle="") 管理
+                            ul.dropdown-menu.animated.fadeInDown(role="menu")
+                                li(ng-if="autoTask.triggerOption!='timed' && autoTask.status!='运行中'")
+                                    a(ng-click="openRunModal(autoTask)") 启动
+                                li(ng-if="autoTask.status=='运行中'")
+                                    a(ng-click="openStopModal(autoTask)") 停止
+                                li(ui-sref-active="active", ng-if="autoTask.status!='运行中'")
+                                    a(ui-sref="auto.modify-auto-task({tid: autoTask.id})", ng-disabled="true") 编辑
+                                li(ng-if="autoTask.status!='运行中'")
+                                    a(ng-click="openDeleteModal(autoTask)", ng-disabled="true") 删除
+script(type="text/ng-template", id="confirmDeleteDialog")
+    ngdialog-message
+        .modal-header
+            h4 确认删除任务{{"“" + ngDialogData.autoTask.name + "”"}}
+        .modal-footer
+            button.btn.btn-danger.mr(type="button", ng-click="deleteAutoTask(ngDialogData.autoTask)") 确定
+            button.btn.btn-default(type="button", ng-click="closeThisDialog()") 取消
+script(type="text/ng-template", id="confirmRunDialog")
+    ngdialog-message
+        .modal-header
+            h4 确认启动任务{{"“" + ngDialogData.autoTask.name + "”"}}
+        .modal-footer
+            button.btn.btn-info.mr(type="button", ng-click="runAutoTask(ngDialogData.autoTask)") 确定
+            button.btn.btn-default(type="button", ng-click="closeThisDialog()") 取消
+script(type="text/ng-template", id="confirmStopDialog")
+    ngdialog-message
+        .modal-header
+            h4 确认中止任务{{"“" + ngDialogData.autoTask.name + "”"}}
+        .modal-footer
+            button.btn.btn-danger.mr(type="button", ng-click="stopAutoTask(ngDialogData.autoTask)") 确定
+            button.btn.btn-default(type="button", ng-click="closeThisDialog()") 取消

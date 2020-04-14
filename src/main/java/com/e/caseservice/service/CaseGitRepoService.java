@@ -1,7 +1,7 @@
 package com.e.caseservice.service;
 
 import com.e.caseservice.common.Constants;
-import com.e.caseservice.dto.*;
+import com.e.caseservice.dto.autocase.*;
 import com.e.caseservice.utils.JavaParseTools;
 import com.e.caseservice.utils.MajorKey;
 import com.e.caseservice.utils.OrderedProperties;

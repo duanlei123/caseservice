@@ -4,10 +4,10 @@ import com.e.caseservice.common.Constants;
 import com.e.caseservice.common.Result;
 import com.e.caseservice.common.StatusCode;
 import com.e.caseservice.dao.AutoParseCaseDao;
-import com.e.caseservice.dto.AutoCaseInfoDto;
-import com.e.caseservice.dto.AutoModuleInfoDto;
-import com.e.caseservice.dto.StatusDto;
-import com.e.caseservice.dto.TestSuitDto;
+import com.e.caseservice.dto.autocase.AutoCaseInfoDto;
+import com.e.caseservice.dto.autocase.AutoModuleInfoDto;
+import com.e.caseservice.dto.autocase.StatusDto;
+import com.e.caseservice.dto.autocase.TestSuitDto;
 import com.e.caseservice.utils.FileUtils;
 import com.e.caseservice.utils.ThreadHandle;
 import com.e.caseservice.utils.Tools;
@@ -19,7 +19,6 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.*;
 
 @Service
 public class AutoParseCaseService {

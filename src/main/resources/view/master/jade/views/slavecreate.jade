@@ -1,0 +1,129 @@
+h3 执行机列表>{{slave_id ? "编辑执行机" : "新建执行机"}}
+    a
+        button.btn.btn-pill-left.btn-default(type="button", ui-sref="auto.slavelist")
+            em.fa.fa-mail-reply 返回
+//.pull-right
+    small(style="color:red;float:left;") *
+    small(style="float:left;") 标记为必填项
+.container-fluid(id='taskCreatePage')
+    dl.bk-group(data-title="基本信息配置", data-disabled="false")
+        dt.bk-group-title 基本信息配置
+        dd.bk-group-detail
+            .bk-group
+                form#slaveInfoForm.form-validate(name="slaveInfoForm", novalidate="")
+                    .bk-form-row
+                        label.bk-form-row-name
+                            span.text-danger *
+                            | 执行机名称：
+                        .bk-form-row-cell
+                            .bk-form-row-li.col-lg-12(style="float:left")
+                                .row
+                                    .col-lg-4(style="min-width: 200px")
+                                        input.form-control(name="slaveName", type="text", required="", placeholder="仅能包含字母、数字，长度为3-35个字符", ng-model="slave.name", ng-disabled="!isEditSlaveName", ng-pattern="/^[0-9a-zA-Z]{3,35}$/")
+                    .bk-form-row
+                        label.bk-form-row-name
+                            span.text-danger *
+                            | 并行数：
+                        .bk-form-row-cell
+                            .bk-form-row-li.col-lg-12(style="float:left")
+                                .row
+                                    .col-lg-4(style="min-width: 200px")
+                                        input.form-control(name="numExecutors", type="number", required="", min="1", ng-model="slave.numExecutors")
+                            .bk-form-row-txt
+                                span 执行机任务并行数量，最小值为1
+                    .bk-form-row
+                        label.bk-form-row-name
+                            span.text-danger *
+                            | 工作目录：
+                        .bk-form-row-cell
+                            .bk-form-row-li.col-lg-12(style="float:left")
+                                .row
+                                    .col-lg-4(style="min-width: 200px")
+                                        input.form-control(name="workCatalog", type="text", required="", placeholder="请填写执行机工作目录", ng-model="slave.workCatalog")
+                    .bk-form-row
+                        label.bk-form-row-name
+                            span.text-danger *
+                            | 主机地址：
+                        .bk-form-row-cell
+                            .bk-form-row-li.col-lg-12(style="float:left")
+                                .row
+                                    .col-lg-4(style="min-width: 200px")
+                                        input.form-control(name="host", type="text", required="", placeholder="主机地址格式如192.168.1.0，不可为空", ng-model="slave.host", ng-pattern="/^((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))$/")
+                    .bk-form-row
+                        label.bk-form-row-name
+                            span.text-danger *
+                            | 登录账号：
+                        .bk-form-row-cell
+                            .bk-form-row-li.col-lg-12(style="float:left")
+                                .row
+                                    .col-lg-4(style="min-width: 200px")
+                                        .row
+                                            .col-lg-9
+                                                ui-select.text-left(name="credentials", ng-if="true", required="", ng-model="slave.credential", theme="bootstrap", reset-search-input="true")
+                                                    ui-select-match(placeholder="请选择登录账户") {{$select.selected.displayName}}
+                                                    ui-select-choices(repeat="credential.id as credential in credentials | filter: $select.search")
+                                                        span(ng-bind-html="credential.displayName | highlight: $select.search")
+                                            .col-lg-3
+                                                button.btn.btn-dtgreen(type="button",ng-click="addCredentials()") 增加
+                    .bk-form-row
+                        label.bk-form-row-name
+                            span 标签：
+                        .bk-form-row-cell
+                            .bk-form-row-li.col-lg-12(style="float:left")
+                                .row
+                                    .col-lg-4(style="min-width: 200px")
+                                        input.form-control(name="tag", type="text", ng-model="slave.tag", placeholder="多个标签使用空格作为分隔符")
+                    .bk-form-row
+                        label.bk-form-row-name
+                            span 执行机描述：
+                        .bk-form-row-cell
+                            .bk-form-row-li.col-lg-12(style="float:left")
+                                .row
+                                    .col-lg-4(style="min-width: 200px")
+                                        textarea.form-control(maxlength="512", spellcheck="false", style="resize: none;", type="text", ng-model="slave.description", placeholder="请填写执行机描述，512个字符以内")
+                    .bk-form-row
+                        label.bk-form-row-name
+                            span.text-danger *
+                            | 注意事项：
+                        .bk-form-row-cell
+                            span 执行机需已安装Jdk，执行命令#/usr/bin/java -version可以返回Jdk版本
+                        .bk-form-row-cell(style="margin-top:8px")
+                            span 执行机需已安装Git，执行命令#/usr/bin/git --version可以返回Git版本
+    dl.bk-group
+        dt.bk-group-title.ng-binding 提交
+        dd.bk-group-detail
+            .bk-form-row
+                .bk-form-row-cell
+                    button.btn.btn-lg.btn-dtblue(type="submit", ng-click="createSlave()", ng-disabled="!slave.name || !slave.numExecutors || !slave.workCatalog || !slave.host || !slave.credential") 保存
+                    button.btn.btn-lg.btn-default(type="button", ng-click="cancelCreateSlave()") 取消
+
+script(type="text/ng-template", id='/addCredentials.html')
+    form#addCredentialsForm.form-validate.form-horizontal(name="addCredentialsForm", novalidate="")
+        .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true', ng-click='cancel()') ×
+            h4.modal-title 增加登录账号
+        .modal-bodyd
+            .form-group
+                label.col-md-2.control-label
+                    span 用户名
+                    span(style='color:#ff0000') *
+                .col-md-8
+                    input.form-control(name='username',type='text', required='', ng-model="credentialsProvider.username")
+                    span.text-danger(ng-show="validateModelInput('username', 'required')") 用户名不能为空
+            .form-group
+                label.col-md-2.control-label
+                    span 密码
+                    span(style='color:#ff0000') *
+                .col-md-8
+                    input.form-control(name='password',type='password', required='', ng-model="credentialsProvider.password")
+                    span.text-danger(ng-show="validateModelInput('password', 'required')") 密码不能为空
+            .form-group
+                label.col-md-2.control-label
+                    | 描述
+                .col-md-8
+                    input.form-control(type='text', name='credentialsProvider.description', ng-model="credentialsProvider.description")
+        .modal-footer
+            small(style="color:red;float:left;") *
+            small(style="float:left;") 标记为必填项
+            button.btn.btn-primary(type='button', ng-click='editFormSubmit()') 确定
+            button.btn.btn-default(type='button', ng-click='cancel()') 取消

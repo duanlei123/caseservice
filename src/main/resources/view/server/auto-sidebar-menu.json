@@ -1,0 +1,37 @@
+[
+  {
+    "text": "任务管理",
+    "sref": "#",
+    "icon": "fa fa-tasks",
+    "permission": "SYSTEM",
+    "submenu": [
+      {
+        "text": "任务列表",
+        "sref": "auto.auto-task-list"
+      }
+    ]
+  },
+  {
+    "text": "执行机管理",
+    "sref": "#",
+    "icon": "fa fa-desktop",
+    "permission": "SYSTEM",
+    "submenu": [
+      {
+        "text": "执行机列表",
+        "sref": "auto.slavelist"
+      }
+    ]
+  },
+  {
+    "text": "测试套管理",
+    "icon": "fa fa-credit-card",
+    "permission": "SYSTEM",
+    "submenu": [
+      {
+        "text": "测试套列表",
+        "sref": "auto.test-suite-list"
+      }
+    ]
+  }
+]

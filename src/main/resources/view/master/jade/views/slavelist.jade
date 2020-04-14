@@ -1,0 +1,56 @@
+h3 执行机列表
+.container-fluid(ng-controller="SlaveListController", ng-class="inBusy ? 'whirl traditional' : ''")
+    .search-dtp-row
+        .pull-left.col-dtp(style="padding: 10px")
+            span 执行机列表总计：{{slaves.length}}
+        .pull-right.col-dtp
+            button.btn.btn-dtgreen(type="button", ui-sref="auto.slavecreate") 新建执行机
+            button.btn.btn-dtgreen(ng-disabled="!checkedSlave", ng-click="onClickCreate()") 复制现有执行机
+    div
+        table#taskListTable.table.table-dtp(ng-table="tableParams", template-pagination="app/views/ngtable-foot.html")
+            tbody
+                tr(ng-if="slaves.length", ng-repeat="slave in $data")
+                    td(style="width: 5%")
+                        .checkbox.c-checkbox
+                            label
+                                input(type="checkbox", ng-checked="slave == checkedSlave", ng-click="onClickCheck(slave)")
+                                span.fa.fa-check
+                    td(data-title="'名称'", style="width: 20%")
+                        span(tip-value="{{slave.name}}", max-len-hidden="20") {{slave.name}}
+                    td(data-title="'标签'", style="width: 20%")
+                        span(tip-value="{{getLabelList(slave).join(', ')}}", max-len-hidden="20") {{getLabelList(slave)}}
+                    td(data-title="'描述'", style="width: 20%")
+                        span(tip-value="{{slave.description ? slave.description : '--'}}", max-len-hidden="20") {{slave.description ? slave.description : "--"}}
+                    td(data-title="'状态（已运行/可运行）'", style="width: 25%")
+                        span
+                            label.label(ng-class="showColorByStatus(slave.status)", style="width: 75px; display: inline-block") {{slave.status}}
+                        span {{slave.runningNumExecutors}}/
+                        span {{slave.numExecutors}}
+                    td(data-title="'操作'", style="width: 10%")
+                        .btn-group(dropdown="dropdown", style="vertical-align: top")
+                            a.dropdown-toggle(href="", dropdown-toggle="") 管理
+                            ul.dropdown-menu.animated.fadeInDown(role="menu")
+                                li
+                                    a(ng-click="editSlave(slave.id, slave.runningNumExecutors)") 编辑
+                                li
+                                    a(ng-click="deleteSlave(slave.name, slave.runningNumExecutors)") 删除
+                tr.table-nodata-tr(ng-if="!slaves.length")
+                    td(colspan="6")
+                        .text-center
+                            span.table-nodata-content 没有符合条件的数据
+script(type="text/ng-template", id="/DelSlaveModule.html")
+    form.form-validate.form-horizontal(name="DelSlaveForm", novalidate="",id="DelSlaveForm")
+        // START modal
+        .modal-header
+            button.close(type="button", data-dismiss="modal", aria-hidden="true", ng-click="cancel()") ×
+            h4.modal-title 删除执行机
+        .modal-body.clearfix
+            .pull-left
+                span.text-size-32.icon-help-2.text-warning
+            .pull-left.col-sm-10
+                span 您所选的执行机
+                span.text-primary {{slaveName}}
+                span 将执行删除操作，是否确认删除？
+        .modal-footer
+            button.btn.btn-danger(type="button", ng-click="submit()") 确定
+            button.btn.btn-default(type="button", ng-click="cancel()") 取消

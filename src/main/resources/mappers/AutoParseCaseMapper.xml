@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.e.caseservice.dao.AutoParseCaseDao">
 
-    <select id="getAllStatus" resultType="com.e.caseservice.dto.StatusDto">
+    <select id="getAllStatus" resultType="com.e.caseservice.dto.autocase.StatusDto">
         SELECT * FROM common_status
     </select>
 
@@ -10,7 +10,7 @@
         SELECT id FROM auto_moduleinfo where testSuiteId=#{testSuiteId}
     </select>
 
-    <select id="getTestSuit" resultType="com.e.caseservice.dto.TestSuitDto">
+    <select id="getTestSuit" resultType="com.e.caseservice.dto.autocase.TestSuitDto">
         SELECT auto_testsuitelist.id,auto_testsuitelist.version,common_status.name as status
         FROM auto_testsuitelist
         LEFT OUTER JOIN common_status
@@ -20,7 +20,9 @@
 
     <update id="updateTestSuite" parameterType="map">
         update auto_testsuitelist
-        set config = #{config},info=#{info},status=(select id from common_status where name = #{status}),version=#{testSuiteVersion}
+        set config = #{config},info=#{info},
+            status=(select id from common_status where name = #{status}),
+            version=#{testSuiteVersion}
         where id = #{testSuiteId};
     </update>
 
@@ -35,11 +37,11 @@
         DELETE FROM auto_moduleinfo WHERE testSuiteId = #{testSuiteId}
     </delete>
 
-    <select id="getExistModules" resultType="com.e.caseservice.dto.AutoModuleInfoDto">
+    <select id="getExistModules" resultType="com.e.caseservice.dto.autocase.AutoModuleInfoDto">
         SELECT * FROM auto_moduleinfo where testSuiteId=#{testSuiteId}
     </select>
 
-    <select id="getExistCases" resultType="com.e.caseservice.dto.AutoCaseInfoDto">
+    <select id="getExistCases" resultType="com.e.caseservice.dto.autocase.AutoCaseInfoDto">
         SELECT auto_caseinfo.* FROM `auto_caseinfo`
         LEFT OUTER JOIN auto_moduleinfo
         on auto_caseinfo.moduleId=auto_moduleinfo.id
