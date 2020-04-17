@@ -14574,11 +14574,6 @@ x:-o-prefocus,
     -webkit-transform: translate3d(-5px, 0, 0);
     transform: translate3d(-5px, 0, 0);
   }
-
-  100% {
-    -webkit-transform: ;
-    transform: ;
-  }
 }
 
 @keyframes bounceInLeft {
@@ -14689,12 +14684,6 @@ x:-o-prefocus,
     -webkit-transform: translate3d(5px, 0, 0);
     -ms-transform: translate3d(5px, 0, 0);
     transform: translate3d(5px, 0, 0);
-  }
-
-  100% {
-    -webkit-transform: ;
-    -ms-transform: ;
-    transform: ;
   }
 }
 
@@ -15127,12 +15116,6 @@ x:-o-prefocus,
     -webkit-transform: translate3d(2000px, 0, 0);
     transform: translate3d(2000px, 0, 0);
   }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: ;
-    transform: ;
-  }
 }
 
 @keyframes fadeInLeftBig {
@@ -15212,13 +15195,6 @@ x:-o-prefocus,
     -ms-transform: translate3d(-2000px, 0, 0);
     transform: translate3d(-2000px, 0, 0);
   }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: ;
-    -ms-transform: ;
-    transform: ;
-  }
 }
 
 .fadeInRightBig {
@@ -15232,12 +15208,6 @@ x:-o-prefocus,
     -webkit-transform: translate3d(-0, 18px, 0);
     transform: translate3d(-0, 18px, 0);
   }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: ;
-    transform: ;
-  }
 }
 
 @keyframes fadeInUp {
@@ -15246,13 +15216,6 @@ x:-o-prefocus,
     -webkit-transform: translate3d(-0, 18px, 0);
     -ms-transform: translate3d(-0, 18px, 0);
     transform: translate3d(-0, 18px, 0);
-  }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: ;
-    -ms-transform: ;
-    transform: ;
   }
 }
 
@@ -15266,12 +15229,6 @@ x:-o-prefocus,
     opacity: 0;
     -webkit-transform: translate3d(-0, 2000px, 0);
     transform: translate3d(-0, 2000px, 0);
-  }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: ;
-    transform: ;
   }
 }
 
@@ -16105,8 +16062,6 @@ x:-o-prefocus,
   100% {
     -webkit-transform-origin: right bottom;
     transform-origin: right bottom;
-    -webkit-transform: ;
-    transform: ;
     opacity: 1;
   }
 }
@@ -16518,8 +16473,6 @@ x:-o-prefocus,
 
   100% {
     opacity: 1;
-    -webkit-transform: ;
-    transform: ;
   }
 }
 
@@ -17031,8 +16984,6 @@ x:-o-prefocus,
 
   100% {
     opacity: 1;
-    -webkit-transform: ;
-    transform: ;
   }
 }
 
@@ -17046,9 +16997,6 @@ x:-o-prefocus,
 
   100% {
     opacity: 1;
-    -webkit-transform: ;
-    -ms-transform: ;
-    transform: ;
   }
 }
 
@@ -21562,10 +21510,6 @@ html body .bk-group-collapsed .bk-group-collapsable {
 }
 
 html body .bk-group-collapsed .bk-group-switch-icon {
-  -webkit-transform: ;
-  -ms-transform: ;
-  -o-transform: ;
-  transform: ;
   -ms-filter: none;
 }
 

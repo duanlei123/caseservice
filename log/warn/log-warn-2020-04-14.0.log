@@ -1,0 +1,68 @@
+2020-04-14 10:00:59.222 [http-nio-9091-exec-6] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /cpp/version/getDtpVersion
+2020-04-14 10:00:59.308 [http-nio-9091-exec-10] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /cpp/conf/getDtpConf
+2020-04-14 10:00:59.327 [http-nio-9091-exec-7] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /cpp/login/getUsers
+2020-04-14 10:00:59.593 [http-nio-9091-exec-3] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /cpp/login/getloginuser
+2020-04-14 10:00:59.740 [http-nio-9091-exec-9] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:01:36.357 [http-nio-9091-exec-7] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /cpp/login/getUsers
+2020-04-14 10:01:46.751 [http-nio-9091-exec-5] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /cpp/version/getDtpVersion
+2020-04-14 10:01:46.759 [http-nio-9091-exec-8] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /cpp/conf/getDtpConf
+2020-04-14 10:01:46.777 [http-nio-9091-exec-10] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /cpp/login/getUsers
+2020-04-14 10:01:46.923 [http-nio-9091-exec-4] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /cpp/login/getloginuser
+2020-04-14 10:01:47.093 [http-nio-9091-exec-6] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:08:40.961 [http-nio-9091-exec-4] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:08:56.815 [http-nio-9091-exec-8] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:15:30.141 [http-nio-9091-exec-3] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:18:11.292 [http-nio-9091-exec-4] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:19:04.967 [http-nio-9091-exec-5] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:19:16.090 [http-nio-9091-exec-1] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:20:46.202 [http-nio-9091-exec-4] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:21:43.203 [http-nio-9091-exec-1] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /slave/getSlaveList
+2020-04-14 10:21:47.895 [http-nio-9091-exec-10] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:24:12.951 [http-nio-9091-exec-2] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:24:12.953 [http-nio-9091-exec-8] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:25:50.936 [http-nio-9091-exec-7] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:25:51.057 [http-nio-9091-exec-5] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:26:25.174 [http-nio-9091-exec-4] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:26:25.176 [http-nio-9091-exec-10] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:28:41.891 [http-nio-9091-exec-8] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:28:41.895 [http-nio-9091-exec-9] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:28:50.627 [http-nio-9091-exec-10] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:28:50.631 [http-nio-9091-exec-3] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:29:58.669 [http-nio-9091-exec-8] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:29:58.732 [http-nio-9091-exec-3] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:30:05.261 [http-nio-9091-exec-9] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /slave/getSlaveList
+2020-04-14 10:30:07.804 [http-nio-9091-exec-2] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:33:48.813 [http-nio-9091-exec-1] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:33:48.814 [http-nio-9091-exec-2] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:36:49.374 [http-nio-9091-exec-3] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:36:49.378 [http-nio-9091-exec-1] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:39:57.535 [http-nio-9091-exec-7] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /login/getloginuser/
+2020-04-14 10:39:57.537 [http-nio-9091-exec-1] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:42:14.159 [http-nio-9091-exec-4] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 10:42:18.116 [http-nio-9091-exec-8] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /slave/getSlaveList
+2020-04-14 11:25:18.447 [http-nio-9091-exec-1] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotestsuit/getGitPushLog
+2020-04-14 14:39:21.938 [http-nio-9091-exec-1] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /
+2020-04-14 14:39:22.033 [http-nio-9091-exec-2] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /favicon.ico
+2020-04-14 14:39:39.956 [http-nio-9091-exec-6] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 14:39:45.588 [http-nio-9091-exec-3] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /slave/getAvailableSlave
+2020-04-14 14:39:47.834 [http-nio-9091-exec-7] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotask/searchAutoTaskList
+2020-04-14 14:39:52.189 [http-nio-9091-exec-1] WARN  o.s.w.s.m.support.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required String parameter 'name' is not present]
+2020-04-14 14:39:56.784 [http-nio-9091-exec-5] WARN  o.s.w.s.m.support.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required String parameter 'name' is not present]
+2020-04-14 15:19:26.656 [http-nio-9091-exec-1] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotestsuit/getGitPushLog
+2020-04-14 16:15:38.479 [http-nio-9091-exec-5] WARN  o.s.w.s.m.support.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required String parameter 'gitHttpUrl' is not present]
+2020-04-14 16:23:36.026 [http-nio-9091-exec-9] WARN  o.s.w.s.m.support.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: I/O error while reading input message; nested exception is java.io.IOException: Stream closed]
+2020-04-14 16:24:46.212 [http-nio-9091-exec-1] WARN  o.s.w.s.m.support.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: I/O error while reading input message; nested exception is java.io.IOException: Stream closed]
+2020-04-14 16:26:55.166 [http-nio-9091-exec-9] WARN  o.s.w.s.m.support.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: I/O error while reading input message; nested exception is java.io.IOException: Stream closed]
+2020-04-14 16:28:47.058 [http-nio-9091-exec-8] WARN  o.s.w.s.m.support.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: I/O error while reading input message; nested exception is java.io.IOException: Stream closed]
+2020-04-14 16:31:45.893 [http-nio-9091-exec-10] WARN  o.s.w.s.m.support.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: I/O error while reading input message; nested exception is java.io.IOException: Stream closed]
+2020-04-14 16:37:26.109 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m7s59ms857µs889ns).
+2020-04-14 17:22:36.088 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m1s786ms363µs331ns).
+2020-04-14 17:44:40.203 [http-nio-9091-exec-1] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /autotestsuit/isSuiteNameDuplicated
+2020-04-14 18:15:42.401 [http-nio-9091-exec-1] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotestsuit/exportConf
+2020-04-14 18:25:45.862 [http-nio-9091-exec-4] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotestsuit/importConf
+2020-04-14 18:51:27.072 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=20m28s258ms705µs958ns).
+2020-04-14 19:16:11.642 [http-nio-9091-exec-8] WARN  o.s.w.s.m.support.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotWritableException: No converter for [class com.e.caseservice.common.Result] with preset Content-Type 'null']
+2020-04-14 19:17:09.728 [http-nio-9091-exec-7] WARN  o.s.w.s.m.support.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotWritableException: No converter for [class com.e.caseservice.common.Result] with preset Content-Type 'null']
+2020-04-14 19:27:46.592 [http-nio-9091-exec-9] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotestsuit/updateTestSuitConf
+2020-04-14 19:46:24.359 [http-nio-9091-exec-7] WARN  org.springframework.web.servlet.PageNotFound - No mapping for POST /autotestsuit/exportConf
+2020-04-14 19:52:37.891 [http-nio-9091-exec-9] WARN  org.springframework.web.servlet.PageNotFound - No mapping for GET /cpp/autotestsuit/downloadConf
